@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import type { BookResponse } from "../api";
 import styled from "styled-components";
+import StarRate from "./StarRate";
 
 const CardDivBook = styled.div`
   text-align: center;
@@ -47,7 +48,7 @@ const BookCard = ({ book }: PropsBook) => {
           alt={book.title}
           style={{ width: "200px", height: "300px", borderRadius: "8px" }}
         />
-        <p>{avgRating}</p>
+        <StarRate ratingValue={Number(avgRating)}/>
       </CardDivBook>
     </div>
   );

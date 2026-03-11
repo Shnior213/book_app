@@ -2,6 +2,7 @@ import { useLocation } from "react-router-dom";
 import type { ReviewResponse } from "../api";
 import styled from "styled-components";
 import { StyledNavLink } from "../styles/StyledNavLink";
+import StarRate from "../components/StarRate";
 
 const StyledDiv = styled.div`
   display: flex;
@@ -32,7 +33,7 @@ const BookPage = () => {
         style={{ width: "250px", height: "350px", borderRadius: "8px" }}
       />
       <h2> {book.title}</h2>
-      <p>Rating: {avgRating}</p>
+      <StarRate ratingValue={avgRating}/>
       {book.reviews &&
         book.reviews.map((review: ReviewResponse) => (
           <div key={review.id}>{review.content}</div>
