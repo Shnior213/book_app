@@ -3,6 +3,7 @@ import { Form } from "../styles/Form";
 import { Input } from "../styles/Input";
 import { Button } from "../styles/Button";
 import { addBook } from "../api";
+import { useNavigate } from "react-router-dom";
 
 type FormFields = {
   title: string;
@@ -18,7 +19,7 @@ const AddBook = () => {
     formState: { errors, isSubmitting },
   } = useForm<FormFields>();
 
-  // console.log("userId from localStorage:", localStorage.getItem("userId"));
+  const nav = useNavigate();
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
@@ -44,6 +45,7 @@ const AddBook = () => {
       setValue("title", "");
       setValue("author", "");
       setValue("image", null);
+      nav("/");
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Something went wrong";
@@ -76,11 +78,6 @@ const AddBook = () => {
       <Input
         type="file"
         {...register("image", { required: " Image is required" })}
-        // onChange={(e) => {
-        //   const file = e.target.files?.[0] ?? null;
-        //   setValue("image", file, { shouldValidate: true });
-        //   console.log("File Selected", file);
-        // }}
       />
       {errors.image && <div>{errors.image.message}</div>}
 

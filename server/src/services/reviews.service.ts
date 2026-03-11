@@ -19,7 +19,7 @@ async function createReview(
   const book = await bookRepo.findOneBy({ id: bookId });
   if (!book) throw new Error("Book not found");
 
-  const review = reviewRepo.create({ content, rating });
+  const review = reviewRepo.create({ content, rating, user, book });
 
   return await reviewRepo.save(review);
 }

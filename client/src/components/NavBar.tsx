@@ -8,8 +8,10 @@ const Header = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 15px;
-  background-color: hsl(0, 1%, 85%);
+  background-color: hsl(206.66666666666669, 87.09677419354843%, 93.92156862745098%);
   border-radius: 3px;
+  position: sticky;
+  top: 0;
 `;
 
 const Li = styled.li`

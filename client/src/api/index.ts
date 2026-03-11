@@ -32,11 +32,22 @@ export interface BookResponse {
   title: string;
   author: string;
   image: string;
+  reviews: ReviewResponse[];
   // readByUsers:
 }
 
+export interface Review {
+  content: string;
+  rating: number;
+}
+
+export interface ReviewResponse {
+  id: number;
+  content: string;
+  rating: number;
+}
+
 export const api = axios.create({
-  
   baseURL: import.meta.env.VITE_API_URL,
 });
 
@@ -121,13 +132,20 @@ export const logout = async (): Promise<void> => {
 
 export const getAllBooks = async (): Promise<BookResponse[]> => {
   const res = await api.get("/books");
+  // console.log(res.data);
 
   return res.data;
 };
 
 export const addBook = async (book: FormData) => {
   const res = await api.post("/books", book);
-  console.log("sdf");
+  // console.log("sdf");
 
+  return res.data;
+};
+
+export const addReview = async (review: Review) => {
+  const res = await api.post("/reviews", review);
+  console.log(res);
   return res.data;
 };

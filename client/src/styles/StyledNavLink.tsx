@@ -17,12 +17,14 @@ export const StyledNavLink = styled(NavLink)`
   transition: all 0.2s ease;
 
   &:hover {
-    background-color: hsl(0, 1%, 87.5%);
+    /* background-color: hsl(0, 1%, 87.5%); */
+    text-shadow: 2px 2px hsla(230, 100%, 50%, 0.2);
     color: hsl(220, 100%, 50%);
   }
 
   &.active {
-    background-color: hsl(0, 1%, 90%);
+    /* background-color: hsl(0, 1%, 90%); */
+    text-shadow: 3px 3px hsla(230, 100%, 50%, 0.3);
     color: hsl(230, 100%, 50%);
   }
 `;

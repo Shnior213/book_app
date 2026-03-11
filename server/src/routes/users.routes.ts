@@ -15,7 +15,6 @@ import {
 
 const router = Router();
 
-
 router.get("/", authMiddleware, UsersController.findAll);
 router.get(
   "/:id",

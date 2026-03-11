@@ -1,6 +1,16 @@
 import { useEffect, useState } from "react";
 import { getAllBooks, type BookResponse } from "../api";
 import { StyledNavLink } from "../styles/StyledNavLink";
+import BookCard from "../components/BookCard";
+import styled from "styled-components";
+
+const ContainerGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+`;
 
 function HomePage() {
   const [books, setBooks] = useState<BookResponse[]>([]);
@@ -8,7 +18,6 @@ function HomePage() {
   useEffect(() => {
     const fetchBooks = async () => {
       const res = await getAllBooks();
-      console.log(res);
       setBooks(res);
     };
     fetchBooks();
@@ -16,24 +25,18 @@ function HomePage() {
 
   return (
     <div>
-      <StyledNavLink to={"/addbook"} style={{ width: "170px" }}>
+      <StyledNavLink to={"/addbook"} style={{ width: "170px", backgroundColor: "hsl(0, 1%, 95%)" }}>
         Add New Book
       </StyledNavLink>
+      <ContainerGrid>
       {Array.isArray(books) ? (
         books?.map((book) => (
-          <div key={book.id}>
-            <div>{book.title}</div>
-
-            <img
-              src={book.image}
-              alt={book.title}
-              style={{ width: "200px", borderRadius: "8px" }}
-            />
-          </div>
+          <BookCard book={book} key={book.id}/>
         ))
-      ) : (
+      )
+       : (
         <p>Loading books or no books found</p>
-      )}
+      )}</ContainerGrid>
     </div>
   );
 }

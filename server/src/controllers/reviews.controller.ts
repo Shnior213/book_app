@@ -3,13 +3,17 @@ import ReviewsService from "../services/reviews.service";
 
 async function createReview(req: Request, res: Response) {
   try {
-    const { content, rating } = req.body;
+    const { content, rating, bookId } = req.body;
     const userId = req.user!.id;
-    const bookId = req.book!.id;
+    // const bookId = req.book!.id;
+
+    if (!bookId) {
+      return res.status(400).json({ message: "bookId is required" });
+    }
 
     const review = await ReviewsService.createReview(
       content,
-      rating,
+      Number(rating),
       userId,
       bookId,
     );
