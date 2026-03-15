@@ -65,7 +65,7 @@ async function updateBook(req: Request, res: Response) {
     const { title, author, userId, reviews } = req.body;
 
     const imageUrl = req.file?.path;
-    const book = BooksService.updateBook(
+    const book = await BooksService.updateBook(
       id,
       title,
       author,

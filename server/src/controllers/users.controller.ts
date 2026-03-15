@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import UsersService from "../services/users.service";
 import { UpdateUserdetails } from "../utils/types";
 
-
 async function findAll(req: Request, res: Response) {
   try {
     const users = await UsersService.findAll();
@@ -45,9 +44,27 @@ async function deleteUser(req: Request, res: Response) {
   }
 }
 
+async function addReadBook(req: Request, res: Response) {
+  try {
+    const bookId = Number(req.params.bookId);
+
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ message: "unauthorizzed" });
+    }
+    const updatedUser = await UsersService.addReadBook(userId, bookId);
+    res.json(updatedUser);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Something went wrong";
+    res.status(400).json({ message });
+  }
+}
+
 export default {
   findAll,
   findOneById,
   updateUser,
   deleteUser,
+  addReadBook,
 };

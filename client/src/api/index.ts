@@ -11,15 +11,21 @@ export interface LoginData {
   password: string;
 }
 
-export interface AuthResponse {
-  accessToken: string;
-  user: {
-    id: number;
+export interface User {
+id: number;
     email: string;
     password: string;
     name: string;
     readBooks: BookResponse[];
-  };
+}
+
+export interface AuthResponse {
+  accessToken: string;
+  user: User
+}
+
+export interface GetUserData {
+  id: number;
 }
 
 export interface Book {
@@ -129,6 +135,21 @@ export const logout = async (): Promise<void> => {
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("userId");
   }
+};
+
+export const getUserById = async (id: number) /* : Promise<AuthResponse> */ => {
+  const res = await api.get(`/users/${id}`);
+
+  return res.data;
+};
+
+export const markBookAsRead = async (
+  bookId: number,
+) /* : Promise<AuthResponse> */ => {
+  // const userId = localStorage.getItem("userId")
+  const res = await api.post(`/users/read-book/${bookId}`);
+
+  return res.data;
 };
 
 export const getAllBooks = async (): Promise<BookResponse[]> => {

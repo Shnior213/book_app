@@ -1,8 +1,9 @@
 import { useLocation } from "react-router-dom";
-import type { ReviewResponse } from "../api";
+import { markBookAsRead, type ReviewResponse } from "../api";
 import styled from "styled-components";
 import { StyledNavLink } from "../styles/StyledNavLink";
 import StarRate from "../components/StarRate";
+import { Button } from "../styles/Button";
 
 const StyledDiv = styled.div`
   display: flex;
@@ -24,7 +25,15 @@ const BookPage = () => {
 
   if (!book) return <div>book not found</div>;
 
-  
+  const handleReadClick = async() => {
+    try {
+      const updatedUser = await markBookAsRead(book.id)
+      console.log("updated user data", updatedUser);
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   return (
     <StyledDiv>
       <img
@@ -39,6 +48,7 @@ const BookPage = () => {
           <div key={review.id}>{review.content}</div>
         ))}
       <StyledNavLink to={'/addreview'} state={book.id}>Add Review</StyledNavLink>
+      <Button onClick={handleReadClick}>Add to Read List</Button>
     </StyledDiv>
   );
 };

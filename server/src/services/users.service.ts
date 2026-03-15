@@ -4,9 +4,10 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { CreateUserDetails, UpdateUserdetails } from "../utils/types";
 import usersController from "../controllers/users.controller";
+import { Book } from "../entities/books";
 
 const userRepo = AppDataSource.getRepository(User);
-
+const bookRepo = AppDataSource.getRepository(Book);
 
 async function findAll() {
   const users = await userRepo.find();
@@ -42,9 +43,32 @@ async function detleteUser(id: number) {
   return result;
 }
 
+async function addReadBook(userId: number, bookId: number) {
+  const user = await userRepo.findOne({
+    where: { id: userId },
+    relations: { readBooks: true },
+  });
+
+  const book = await bookRepo.findOneBy({ id: bookId });
+
+  if (!user || !book) {
+    throw new Error("user or book not found");
+  }
+
+  const alreadyExists = user.readBooks?.some((b) => b.id === bookId);
+
+  if (!alreadyExists) {
+    user.readBooks = [...(user.readBooks || []), book];
+
+    await userRepo.save(user);
+  }
+  return user;
+}
+
 export default {
   findAll,
   findOneById,
   updateUser,
   detleteUser,
+  addReadBook,
 };

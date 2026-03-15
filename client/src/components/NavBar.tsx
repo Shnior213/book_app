@@ -43,7 +43,7 @@ const H1 = styled.h1`
 
 const NavBar = () => {
   const { user } = useUserContext();
-  console.log(user);
+  // console.log(user);
 
   return (
     <Header>
@@ -54,7 +54,7 @@ const NavBar = () => {
       {user ? (
         <Ul>
           <Li>
-            <StyledNavLink to={"/mybooks"}>My Books</StyledNavLink>
+            <StyledNavLink to={"/mybooks"}>Books I Read</StyledNavLink>
           </Li>
           <Li>
             <Button>Logout</Button>

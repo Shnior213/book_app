@@ -29,7 +29,7 @@ type PropsBook = {
 };
 
 const BookCard = ({ book }: PropsBook) => {
-  const reviews = book.reviews;
+  const reviews = book.reviews || [];
 
   const avgRating =
     reviews.length > 0

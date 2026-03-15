@@ -19,7 +19,7 @@ router.get("/", authMiddleware, UsersController.findAll);
 router.get(
   "/:id",
   authMiddleware,
-  sameUserOrAdminMiddleware,
+  // sameUserOrAdminMiddleware,
   UsersController.findOneById,
 );
 router.put(
@@ -34,5 +34,6 @@ router.delete(
   isAdminMiddleware,
   UsersController.deleteUser,
 );
+router.post("/read-book/:bookId", authMiddleware, UsersController.addReadBook);
 
 export default router;
