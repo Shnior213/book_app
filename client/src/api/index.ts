@@ -18,6 +18,7 @@ export interface AuthResponse {
     email: string;
     password: string;
     name: string;
+    readBooks: BookResponse[];
   };
 }
 

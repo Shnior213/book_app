@@ -1,15 +1,13 @@
-import { type ReactNode } from "react";
 import NavBar from "../components/NavBar";
+import { Outlet } from "react-router-dom";
 
-type MainLayoutProps = {
-  children: ReactNode;
-};
-
-const MainLayout = ({ children }: MainLayoutProps) => {
+const MainLayout = () => {
   return (
     <div>
       <NavBar />
-      <main>{children}</main>
+      <main>
+        <Outlet />
+      </main>
     </div>
   );
 };

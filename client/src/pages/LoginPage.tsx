@@ -3,13 +3,20 @@ import { Form } from "../styles/Form";
 import { Input } from "../styles/Input";
 import { Button } from "../styles/Button";
 import { login } from "../api";
+import { useUserContext } from "../context/UseUserContext";
+import { useNavigate } from "react-router-dom";
 
 type FormFields = {
   // name: string;
   email: string;
   password: string;
 };
+
 const LoginPage = () => {
+  const { setUser } = useUserContext();
+
+  const nav = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -20,9 +27,12 @@ const LoginPage = () => {
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      await login({ email: data.email, password: data.password });
-      setValue("email", "")
-      setValue("password", "")
+      const user = await login({ email: data.email, password: data.password });
+      setUser({ userId: user.user.id.toString(), username: user.user.name });
+
+      setValue("email", "");
+      setValue("password", "");
+      nav("/");
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Something went wrong";

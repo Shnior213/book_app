@@ -3,6 +3,7 @@ import { Form } from "../styles/Form";
 import { Input } from "../styles/Input";
 import { Button } from "../styles/Button";
 import { registerUser } from "../api";
+import { useNavigate } from "react-router-dom";
 
 type FormFields = {
   name: string;
@@ -17,9 +18,16 @@ const RegisterPage = () => {
     formState: { errors, isSubmitting },
   } = useForm<FormFields>();
 
+  const nav = useNavigate();
+
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      await registerUser({ email: data.email, name: data.name, password: data.password})
+      await registerUser({
+        email: data.email,
+        name: data.name,
+        password: data.password,
+      });
+      nav("/");
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Something went wrong";

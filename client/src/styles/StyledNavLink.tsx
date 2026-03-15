@@ -7,7 +7,7 @@ export const StyledNavLink = styled(NavLink)`
   align-items: center;
   justify-content: center;
   height: 50px;
-  /* width: 170px; */
+  width: 170px;
   color: hsl(211, 100%, 50%);
   text-decoration: none;
   font-weight: bold;

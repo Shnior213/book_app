@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { StyledNavLink } from "../styles/StyledNavLink";
+import { useUserContext } from "../context/UseUserContext";
+import { Button } from "../styles/Button";
 
 const Header = styled.header`
   /* width: 100%; */
@@ -8,7 +10,11 @@ const Header = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 15px;
-  background-color: hsl(206.66666666666669, 87.09677419354843%, 93.92156862745098%);
+  background-color: hsl(
+    206.66666666666669,
+    87.09677419354843%,
+    93.92156862745098%
+  );
   border-radius: 3px;
   position: sticky;
   top: 0;
@@ -18,10 +24,12 @@ const Li = styled.li`
   list-style-type: none;
   font-size: 1.5rem;
   width: 120px;
+  margin: 10px;
 `;
 
 const Ul = styled.ul`
   display: flex;
+  justify-content: center;
   gap: 1rem;
 `;
 
@@ -34,19 +42,34 @@ const H1 = styled.h1`
 `;
 
 const NavBar = () => {
+  const { user } = useUserContext();
+  console.log(user);
+
   return (
     <Header>
       <StyledNavLink to={"/"}>
         <H1>Home Page</H1>
       </StyledNavLink>
-      <Ul>
-        <Li>
-          <StyledNavLink to={"/register"}>Register</StyledNavLink>
-        </Li>
-        <Li>
-          <StyledNavLink to={"/login"}>Login</StyledNavLink>
-        </Li>
-      </Ul>
+
+      {user ? (
+        <Ul>
+          <Li>
+            <StyledNavLink to={"/mybooks"}>My Books</StyledNavLink>
+          </Li>
+          <Li>
+            <Button>Logout</Button>
+          </Li>
+        </Ul>
+      ) : (
+        <Ul>
+          <Li>
+            <StyledNavLink to={"/register"}>Register</StyledNavLink>
+          </Li>
+          <Li>
+            <StyledNavLink to={"/login"}>Login</StyledNavLink>
+          </Li>
+        </Ul>
+      )}
     </Header>
   );
 };
