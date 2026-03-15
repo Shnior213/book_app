@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import { StyledNavLink } from "../styles/StyledNavLink";
 import { useUserContext } from "../context/UseUserContext";
-import { Button } from "../styles/Button";
+import { logout } from "../api";
+import { useNavigate } from "react-router-dom";
 
 const Header = styled.header`
   /* width: 100%; */
@@ -9,12 +10,9 @@ const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px;
-  background-color: hsl(
-    206.66666666666669,
-    87.09677419354843%,
-    93.92156862745098%
-  );
+  padding: 0 20px;
+  height: 100px;
+  background-color: hsl(206.6, 87%, 93.9%);
   border-radius: 3px;
   position: sticky;
   top: 0;
@@ -29,21 +27,49 @@ const Li = styled.li`
 
 const Ul = styled.ul`
   display: flex;
-  justify-content: center;
-  gap: 1rem;
+  align-items: center;
+  gap: 3rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 `;
 
 const H1 = styled.h1`
   /* font-size: 1.5rem; */
-  height: 50px; /* אותו גובה */
+  height: 50px;
   display: flex;
   align-items: center;
   margin: 0;
 `;
 
+const LogoutButton = styled.button`
+  height: 40px;
+  width: 100px;
+  cursor: pointer;
+  margin: 0;
+  color: hsl(211, 100%, 50%);
+  font-size: 1.5rem;
+  font-weight: bold;
+  background-color: transparent;
+  border: none;
+  border-radius: 8px;
+
+  &:hover {
+    color: black;
+  }
+`;
+
 const NavBar = () => {
-  const { user } = useUserContext();
+  const { user, setUser } = useUserContext();
   // console.log(user);
+  const nav = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    console.log("user logout", user);
+    setUser(undefined);
+    nav("/");
+  };
 
   return (
     <Header>
@@ -57,7 +83,7 @@ const NavBar = () => {
             <StyledNavLink to={"/mybooks"}>Books I Read</StyledNavLink>
           </Li>
           <Li>
-            <Button>Logout</Button>
+            <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
           </Li>
         </Ul>
       ) : (

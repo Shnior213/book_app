@@ -25,18 +25,24 @@ function HomePage() {
 
   return (
     <div>
-      <StyledNavLink to={"/addbook"} style={{ width: "170px", backgroundColor: "hsl(0, 1%, 95%)" }}>
+      <StyledNavLink
+        to={"/addbook"}
+        style={{
+          width: "170px",
+          backgroundColor: "hsl(0, 1%, 95%)",
+          margin: "20px",
+          fontSize: "1.5rem",
+        }}
+      >
         Add New Book
       </StyledNavLink>
       <ContainerGrid>
-      {Array.isArray(books) ? (
-        books?.map((book) => (
-          <BookCard book={book} key={book.id}/>
-        ))
-      )
-       : (
-        <p>Loading books or no books found</p>
-      )}</ContainerGrid>
+        {Array.isArray(books) ? (
+          books?.map((book) => <BookCard book={book} key={book.id} />)
+        ) : (
+          <p>Loading books or no books found</p>
+        )}
+      </ContainerGrid>
     </div>
   );
 }

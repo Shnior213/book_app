@@ -146,7 +146,6 @@ export const getUserById = async (id: number) /* : Promise<AuthResponse> */ => {
 export const markBookAsRead = async (
   bookId: number,
 ) /* : Promise<AuthResponse> */ => {
-  // const userId = localStorage.getItem("userId")
   const res = await api.post(`/users/read-book/${bookId}`);
 
   return res.data;

@@ -59,10 +59,13 @@ async function addReadBook(userId: number, bookId: number) {
 
   if (!alreadyExists) {
     user.readBooks = [...(user.readBooks || []), book];
-
     await userRepo.save(user);
-  }
-  return user;
+    return {message: "book added", user}
+  } 
+  // else {
+  //   throw new Error("This book is already in your read list");
+  // }
+  return {message: "book already exists", user};
 }
 
 export default {

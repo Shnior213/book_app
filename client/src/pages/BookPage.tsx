@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { markBookAsRead, type ReviewResponse } from "../api";
 import styled from "styled-components";
 import { StyledNavLink } from "../styles/StyledNavLink";
@@ -22,17 +22,20 @@ const StyledDiv = styled.div`
 const BookPage = () => {
   const location = useLocation();
   const { book, avgRating } = location.state;
+  const nav = useNavigate();
 
   if (!book) return <div>book not found</div>;
 
-  const handleReadClick = async() => {
+  const handleReadClick = async () => {
     try {
-      const updatedUser = await markBookAsRead(book.id)
+      const updatedUser = await markBookAsRead(book.id);
       console.log("updated user data", updatedUser);
     } catch (err) {
-      console.error(err)
+      console.error(err);
+    } finally {
+      nav("/");
     }
-  }
+  };
 
   return (
     <StyledDiv>
@@ -42,12 +45,14 @@ const BookPage = () => {
         style={{ width: "250px", height: "350px", borderRadius: "8px" }}
       />
       <h2> {book.title}</h2>
-      <StarRate ratingValue={avgRating}/>
+      <StarRate ratingValue={avgRating} />
       {book.reviews &&
         book.reviews.map((review: ReviewResponse) => (
           <div key={review.id}>{review.content}</div>
         ))}
-      <StyledNavLink to={'/addreview'} state={book.id}>Add Review</StyledNavLink>
+      <StyledNavLink to={"/addreview"} state={book.id}>
+        Add Review
+      </StyledNavLink>
       <Button onClick={handleReadClick}>Add to Read List</Button>
     </StyledDiv>
   );
