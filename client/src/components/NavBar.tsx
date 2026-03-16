@@ -68,10 +68,14 @@ const NavBar = () => {
   const nav = useNavigate();
 
   const handleLogout = async () => {
-    await logout();
-    console.log("user logout", user);
-    setUser(undefined);
-    nav("/");
+    try {
+      await logout();
+      nav("/", { replace: true });
+      setUser(undefined);
+      console.log("user logged out");
+    } catch (err) {
+      console.error(":ogout failed", err);
+    }
   };
 
   return (

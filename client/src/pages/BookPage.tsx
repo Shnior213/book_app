@@ -19,6 +19,33 @@ const StyledDiv = styled.div`
   font-size: 1.3rem;
 `;
 
+const StyledDiv2 = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+`
+
+const RatingText = styled.span`
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #4a4a4a;
+  font-family: sans-serif;
+`;
+
+const StyledButton = styled(Button)`
+  width: 160px;
+  height: 45px;
+  background-color:  hsl(206.6, 90%, 92%);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+
+&:hover{
+  background-color:  hsl(206.6, 90%, 90%);
+}
+`
+
 const BookPage = () => {
   const location = useLocation();
   const { book, avgRating } = location.state;
@@ -45,7 +72,10 @@ const BookPage = () => {
         style={{ width: "250px", height: "350px", borderRadius: "8px" }}
       />
       <h2> {book.title}</h2>
+      <StyledDiv2>
       <StarRate ratingValue={avgRating} />
+      <RatingText>{avgRating} / 5</RatingText>
+      </StyledDiv2>
       {book.reviews &&
         book.reviews.map((review: ReviewResponse) => (
           <div key={review.id}>{review.content}</div>
@@ -53,7 +83,7 @@ const BookPage = () => {
       <StyledNavLink to={"/addreview"} state={book.id}>
         Add Review
       </StyledNavLink>
-      <Button onClick={handleReadClick}>Add to Read List</Button>
+      <StyledButton onClick={handleReadClick}>Add to Read List</StyledButton>
     </StyledDiv>
   );
 };

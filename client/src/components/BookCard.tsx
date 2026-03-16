@@ -4,6 +4,8 @@ import styled from "styled-components";
 import StarRate from "./StarRate";
 
 const CardDivBook = styled.div`
+  width: 400px;
+  margin: auto;
   text-align: center;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -48,7 +50,7 @@ const BookCard = ({ book }: PropsBook) => {
           alt={book.title}
           style={{ width: "200px", height: "300px", borderRadius: "8px" }}
         />
-        <StarRate ratingValue={Number(avgRating)}/>
+        <StarRate ratingValue={Number(avgRating)} />
       </CardDivBook>
     </div>
   );

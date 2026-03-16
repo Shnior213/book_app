@@ -13,12 +13,6 @@ const StarsContainer = styled.div`
   gap: 5px;
   margin: 20px;
 `;
-const RatingText = styled.span`
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: #4a4a4a;
-  font-family: sans-serif;
-`;
 
 const StarRate = ({ ratingValue }: Props) => {
   return (
@@ -38,7 +32,7 @@ const StarRate = ({ ratingValue }: Props) => {
           </span>
         );
       })}
-      <RatingText>{ratingValue} / 5</RatingText>
+      {/* <RatingText>{ratingValue} / 5</RatingText> */}
     </StarsContainer>
   );
 };

@@ -1,5 +1,6 @@
 import axios, { type InternalAxiosRequestConfig } from "axios";
 
+
 export interface RegisterData {
   email: string;
   password: string;
