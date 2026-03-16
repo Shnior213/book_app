@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 
 const Header = styled.header`
   /* width: 100%; */
+  max-width: 100vw;
+  overflow-x: hidden;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -16,6 +18,7 @@ const Header = styled.header`
   border-radius: 3px;
   position: sticky;
   top: 0;
+  z-index: 100;
 `;
 
 const Li = styled.li`
