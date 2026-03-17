@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { StyledNavLink } from "../styles/StyledNavLink";
 import StarRate from "../components/StarRate";
 import { Button } from "../styles/Button";
+import { useMutation } from "@tanstack/react-query";
 
 const StyledDiv = styled.div`
   display: flex;
@@ -23,8 +24,7 @@ const StyledDiv2 = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  
-`
+`;
 
 const RatingText = styled.span`
   font-size: 1.1rem;
@@ -34,34 +34,38 @@ const RatingText = styled.span`
 `;
 
 const StyledButton = styled(Button)`
-  width: 160px;
+  width: 170px;
   height: 45px;
-  background-color:  hsl(206.6, 90%, 92%);
+  background-color: hsl(206.6, 90%, 92%);
   border-radius: 8px;
   font-size: 1rem;
   font-weight: bold;
 
-&:hover{
-  background-color:  hsl(206.6, 90%, 90%);
-}
-`
+  &:hover {
+    background-color: hsl(206.6, 90%, 90%);
+  }
+`;
 
 const BookPage = () => {
   const location = useLocation();
   const { book, avgRating } = location.state;
   const nav = useNavigate();
 
+  const { mutate: markBookAsReadMutation } = useMutation({
+    mutationFn: markBookAsRead,
+    onSuccess: (updatedUser) => {
+      console.log("updated user data", updatedUser);
+      nav("/");
+    },
+    onError: (err) => {
+      console.error(err);
+    },
+  });
+
   if (!book) return <div>book not found</div>;
 
-  const handleReadClick = async () => {
-    try {
-      const updatedUser = await markBookAsRead(book.id);
-      console.log("updated user data", updatedUser);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      nav("/");
-    }
+  const handleReadClick = () => {
+    markBookAsReadMutation(book.id);
   };
 
   return (
@@ -73,8 +77,8 @@ const BookPage = () => {
       />
       <h2> {book.title}</h2>
       <StyledDiv2>
-      <StarRate ratingValue={avgRating} />
-      <RatingText>{avgRating} / 5</RatingText>
+        <StarRate ratingValue={avgRating} />
+        <RatingText>{avgRating} / 5</RatingText>
       </StyledDiv2>
       {book.reviews &&
         book.reviews.map((review: ReviewResponse) => (

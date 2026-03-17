@@ -1,6 +1,5 @@
 import axios, { type InternalAxiosRequestConfig } from "axios";
 
-
 export interface RegisterData {
   email: string;
   password: string;
@@ -13,16 +12,16 @@ export interface LoginData {
 }
 
 export interface User {
-id: number;
-    email: string;
-    password: string;
-    name: string;
-    readBooks: BookResponse[];
+  id: number;
+  email: string;
+  password: string;
+  name: string;
+  readBooks: BookResponse[];
 }
 
 export interface AuthResponse {
   accessToken: string;
-  user: User
+  user: User;
 }
 
 export interface GetUserData {
@@ -123,22 +122,14 @@ export const login = async (credentials: LoginData): Promise<AuthResponse> => {
   return res.data;
 };
 
-export const logout = async (): Promise<void> => {
-  try {
-    const refreshToken = localStorage.getItem("refreshToken");
-    if (refreshToken) {
-      await api.post("/auth/logout", { refreshToken });
-    }
-  } catch (error) {
-    console.error("Logout failed", error);
-  } finally {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("userId");
+export const logout = async () => {
+  const refreshToken = localStorage.getItem("refreshToken");
+  if (refreshToken) {
+    await api.post("/auth/logout", { refreshToken });
   }
 };
 
-export const getUserById = async (id: number) /* : Promise<AuthResponse> */ => {
+export const getUserById = async (id: number): Promise<User> => {
   const res = await api.get(`/users/${id}`);
 
   return res.data;
@@ -161,8 +152,6 @@ export const getAllBooks = async (): Promise<BookResponse[]> => {
 
 export const addBook = async (book: FormData) => {
   const res = await api.post("/books", book);
-  // console.log("sdf");
-
   return res.data;
 };
 

@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import { StyledNavLink } from "../styles/StyledNavLink";
-import { useUserContext } from "../context/UseUserContext";
+import { useUserContext } from "../context/useUserContext";
 import { logout } from "../api";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
 
 const Header = styled.header`
-  /* width: 100%; */
   max-width: 100vw;
   overflow-x: hidden;
   margin: 0 auto;
@@ -64,18 +64,25 @@ const LogoutButton = styled.button`
 
 const NavBar = () => {
   const { user, setUser } = useUserContext();
-  // console.log(user);
   const nav = useNavigate();
 
-  const handleLogout = async () => {
-    try {
-      await logout();
+  const { mutate: logoutMutation } = useMutation({
+    mutationFn: logout,
+    onSuccess: () => {
       nav("/", { replace: true });
       setUser(undefined);
-      console.log("user logged out");
-    } catch (err) {
-      console.error(":ogout failed", err);
-    }
+
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("userId");
+    },
+    onError: (err) => {
+      console.error("logout failed", err);
+    },
+  });
+
+  const handleLogout = () => {
+    logoutMutation();
   };
 
   return (

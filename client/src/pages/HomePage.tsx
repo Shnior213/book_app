@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
-import { getAllBooks, type BookResponse } from "../api";
+import { useState } from "react";
+import { getAllBooks } from "../api";
 import { StyledNavLink } from "../styles/StyledNavLink";
 import BookCard from "../components/BookCard";
 import styled from "styled-components";
 import { Input } from "../styles/Input";
 import { IoSearch } from "react-icons/io5";
+import { useQuery } from "@tanstack/react-query";
 
 const ContainerGrid = styled.div`
   display: grid;
@@ -49,16 +50,24 @@ const StyledBtnNavLink = styled(StyledNavLink)`
 `;
 
 function HomePage() {
-  const [books, setBooks] = useState<BookResponse[]>([]);
   const [searchBook, setSearchBook] = useState<string>("");
 
-  useEffect(() => {
-    const fetchBooks = async () => {
-      const res = await getAllBooks();
-      setBooks(res);
-    };
-    fetchBooks();
-  }, []);
+  const {
+    data: books,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryFn: () => getAllBooks(),
+    queryKey: ["books"],
+  });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error fetching data</div>;
+  }
 
   //   const filteredBooks = useMemo(() => {
   //   if (!searchBook) return books;
@@ -94,7 +103,7 @@ function HomePage() {
             )
             .map((b) => <BookCard book={b} key={b.id} />)
         ) : (
-          <p>Loading books or no books found</p>
+          <p>no books found</p>
         )}
       </ContainerGrid>
     </>

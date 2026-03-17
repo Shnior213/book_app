@@ -6,7 +6,7 @@ import RegisterPage from "./pages/RegisterPage";
 import AddBook from "./pages/AddBook";
 import BookPage from "./pages/BookPage";
 import AddReview from "./pages/AddReview";
-import { UserProvider } from "./context/useContext";
+import { UserProvider } from "./context/UserProvider";
 import MyBooks from "./pages/MyBooks";
 import ProtectedRoute from "./components/ProtectedRoute";
 
