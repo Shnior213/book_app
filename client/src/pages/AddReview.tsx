@@ -5,6 +5,7 @@ import { Button } from "../styles/Button";
 import { addReview } from "../api";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
 
 type FormFields = {
   rating: number;
@@ -16,6 +17,7 @@ const AddReview = () => {
     register,
     handleSubmit,
     setValue,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<FormFields>();
 
@@ -23,32 +25,35 @@ const AddReview = () => {
   const bookId = location.state;
   const nav = useNavigate();
 
-  const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    try {
-      const userId = localStorage.getItem("userId");
-
-      if (!userId || !bookId) {
-        return;
-      }
-      console.log("on submit", data);
-
-      const payload = {
-        rating: Number(data.rating),
-        content: data.content,
-        bookId: bookId,
-      };
-
-      const res = await addReview(payload);
-      console.log(res);
-
+  const { mutate: addReviewMutation } = useMutation({
+    mutationFn: addReview,
+    onSuccess: (data) => {
+      console.log("Review added ", data);
       setValue("rating", 0);
       setValue("content", "");
       nav(-1);
-    } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Something went wrong";
-      console.log(message);
+    },
+    onError: (err) => {
+      console.error(err);
+      setError("root", { message: err.message || "something went worng" });
+    },
+  });
+
+  const onSubmit: SubmitHandler<FormFields> = (data) => {
+    const userId = localStorage.getItem("userId");
+
+    if (!userId || !bookId) {
+      console.log("Missing userId or bookId");
+      return;
     }
+
+    const payload = {
+      rating: Number(data.rating),
+      content: data.content,
+      bookId: bookId,
+    };
+
+    addReviewMutation(payload);
   };
 
   return (

@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { getUserById, type User } from "../api";
-import { useUserContext } from "../context/UseUserContext";
+import { getUserById } from "../api";
+import { useUserContext } from "../context/useUserContext";
 import BookCard from "../components/BookCard";
 import styled from "styled-components";
+import { useQuery } from "@tanstack/react-query";
 
 const StyledDiv = styled.div`
   width: 400px;
@@ -13,22 +13,24 @@ const StyledDiv = styled.div`
 `;
 
 const MyBooks = () => {
-  const [userData, setUserData] = useState<User | undefined>(undefined);
   const { user } = useUserContext();
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      if (user && user.userId) {
-        try {
-          const res = await getUserById(Number(user.userId));
-          setUserData(res);
-        } catch (err) {
-          console.error(err);
-        }
-      }
-    };
-    fetchUser();
-  }, [user]);
+  const {
+    data: userData,
+    isPending,
+    isError,
+  } = useQuery({
+    queryFn: () => getUserById(Number(user?.userId)),
+    queryKey: ["userData"],
+  });
+
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error fetching data</div>;
+  }
 
   return (
     <StyledDiv>

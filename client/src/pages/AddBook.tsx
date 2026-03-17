@@ -4,6 +4,7 @@ import { Input } from "../styles/Input";
 import { Button } from "../styles/Button";
 import { addBook } from "../api";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
 
 type FormFields = {
   title: string;
@@ -21,36 +22,36 @@ const AddBook = () => {
 
   const nav = useNavigate();
 
-  const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    try {
-      const userId = localStorage.getItem("userId");
-
-      const file = data.image instanceof FileList ? data.image[0] : data.image;
-
-      if (!file || !userId) {
-        alert("Please select an image");
-        return;
-      }
-      console.log("on submit", data);
-
-      const formData = new FormData();
-      formData.append("title", data.title);
-      formData.append("author", data.author);
-      formData.append("image", file);
-      // formData.append("userId", userId);
-
-      const res = await addBook(formData);
-      console.log(res);
-
+  const { mutate: addBookMutation } = useMutation({
+    mutationFn: addBook,
+    onSuccess: () => {
       setValue("title", "");
       setValue("author", "");
       setValue("image", null);
       nav("/");
-    } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Something went wrong";
-      console.log(message);
+    },
+    onError: (err) => {
+      console.error(err);
+    },
+  });
+
+  const onSubmit: SubmitHandler<FormFields> = (data) => {
+    const userId = localStorage.getItem("userId");
+
+    const file = data.image instanceof FileList ? data.image[0] : data.image;
+
+    if (!file || !userId) {
+      alert("Please select an image");
+      return;
     }
+    console.log("on submit", data);
+
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("author", data.author);
+    formData.append("image", file);
+
+    addBookMutation(formData);
   };
 
   return (

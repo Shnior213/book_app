@@ -1,10 +1,9 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useUserContext } from "../context/UseUserContext";
 
 const ProtectedRoute = () => {
-  const { user } = useUserContext();
+  const userId = localStorage.getItem("userId");
 
-  if (!user) {
+  if (!userId) {
     return <Navigate to={"/login"} />;
   }
   return <Outlet />;

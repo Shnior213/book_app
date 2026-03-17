@@ -4,6 +4,7 @@ import { Input } from "../styles/Input";
 import { Button } from "../styles/Button";
 import { registerUser } from "../api";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
 
 type FormFields = {
   name: string;
@@ -11,29 +12,29 @@ type FormFields = {
   password: string;
 };
 const RegisterPage = () => {
+  const nav = useNavigate();
+
   const {
     register,
     handleSubmit,
     setError,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<FormFields>();
 
-  const nav = useNavigate();
-
-  const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    try {
-      await registerUser({
-        email: data.email,
-        name: data.name,
-        password: data.password,
-      });
+  const { mutate: registerUserMutation, isPending } = useMutation({
+    mutationFn: registerUser,
+    onSuccess: () => {
       nav("/");
-    } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Something went wrong";
+    },
+    onError: (err) => {
+      setError("root", {
+        message: err.message || "something went worng",
+      });
+    },
+  });
 
-      setError("root", { message });
-    }
+  const onSubmit: SubmitHandler<FormFields> = (data) => {
+    registerUserMutation(data);
   };
 
   return (
@@ -73,8 +74,8 @@ const RegisterPage = () => {
         placeholder="Password"
       />
       {errors.password && <div>{errors.password.message}</div>}
-      <Button disabled={isSubmitting} type="submit">
-        {isSubmitting ? "Loading" : "Submit"}
+      <Button disabled={isPending} type="submit">
+        {isPending ? "Loading..." : "Submit"}
       </Button>
       {errors.root && <div>{errors.root.message}</div>}
     </Form>

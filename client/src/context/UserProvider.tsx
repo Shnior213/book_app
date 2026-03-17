@@ -1,8 +1,5 @@
-import {
-  useState,
-} from "react";
+import { useState } from "react";
 import { UserContext, type UserCtx } from "./UserContext";
-
 
 type UserProviderProps = {
   children: React.ReactNode;
@@ -14,6 +11,4 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   return <UserContext value={{ user, setUser }}>{children}</UserContext>;
 };
 
-
 export { UserContext };
-

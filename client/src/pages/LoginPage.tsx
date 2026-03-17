@@ -3,11 +3,11 @@ import { Form } from "../styles/Form";
 import { Input } from "../styles/Input";
 import { Button } from "../styles/Button";
 import { login } from "../api";
-import { useUserContext } from "../context/UseUserContext";
+import { useUserContext } from "../context/useUserContext";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
 
 type FormFields = {
-  // name: string;
   email: string;
   password: string;
 };
@@ -22,23 +22,27 @@ const LoginPage = () => {
     handleSubmit,
     setValue,
     setError,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<FormFields>();
 
-  const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    try {
-      const user = await login({ email: data.email, password: data.password });
-      setUser({ userId: user.user.id.toString(), username: user.user.name });
-
+  const { mutate: loginMutation, isPending } = useMutation({
+    mutationFn: login,
+    onSuccess: (responseData) => {
+      setUser({
+        userId: responseData.user.id.toString(),
+        username: responseData.user.name,
+      });
       setValue("email", "");
       setValue("password", "");
       nav("/");
-    } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Something went wrong";
+    },
+    onError: (err) => {
+      setError("root", { message: err.message });
+    },
+  });
 
-      setError("root", { message });
-    }
+  const onSubmit: SubmitHandler<FormFields> = (data) => {
+    loginMutation(data);
   };
 
   return (
@@ -71,8 +75,8 @@ const LoginPage = () => {
         placeholder="Password"
       />
       {errors.password && <div>{errors.password.message}</div>}
-      <Button disabled={isSubmitting} type="submit">
-        {isSubmitting ? "Ooading..." : "Submit"}
+      <Button disabled={isPending} type="submit">
+        {isPending ? "Ooading..." : "Submit"}
       </Button>
       {errors.root && <div>{errors.root.message}</div>}
     </Form>
