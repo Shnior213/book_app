@@ -84,6 +84,7 @@ function HomePage() {
           </IconWrapper>
           <StyledInput
             type="text"
+            name="book-search"
             placeholder="Title ot author"
             value={searchBook}
             onChange={(e) => setSearchBook(e.target.value)}

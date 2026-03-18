@@ -13,6 +13,6 @@ export const Input = styled.input`
   transition: border-color 0.2s;
 
   &:focus {
-    border-color: hsl(211, 100%, 50%); /* הצבע הכחול מה-NavLink שלך */
+    border-color: hsl(211, 100%, 50%);
   }
 `
