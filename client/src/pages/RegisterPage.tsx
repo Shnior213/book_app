@@ -2,7 +2,7 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { Form } from "../styles/Form";
 import { Input } from "../styles/Input";
 import { Button } from "../styles/Button";
-import { registerUser } from "../api";
+import { registerUser } from "../services/auth.service"; 
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 

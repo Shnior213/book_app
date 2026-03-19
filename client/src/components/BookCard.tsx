@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import type { BookResponse } from "../api";
+import type { BookResponse } from "../types/types";
 import styled from "styled-components";
 import StarRate from "./StarRate";
 

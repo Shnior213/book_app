@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getAllBooks } from "../api";
+import { getAllBooks } from "../services/book.service"; 
 import { StyledNavLink } from "../styles/StyledNavLink";
 import BookCard from "../components/BookCard";
 import styled from "styled-components";

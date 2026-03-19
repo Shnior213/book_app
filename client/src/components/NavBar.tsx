@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { StyledNavLink } from "../styles/StyledNavLink";
 import { useUserContext } from "../context/UseUserContext";
-import { logout } from "../api";
+import { logout } from "../services/auth.service"; 
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 

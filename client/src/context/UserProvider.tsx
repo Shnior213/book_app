@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { UserContext, type UserCtx } from "./UserContext";
-// import { api } from "../api";
 
 type UserProviderProps = {
   children: React.ReactNode;

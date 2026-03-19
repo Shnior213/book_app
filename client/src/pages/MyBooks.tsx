@@ -1,4 +1,4 @@
-import { getUserById } from "../api";
+import { getUserById } from "../services/user.service"; 
 import { useUserContext } from "../context/UseUserContext";
 import BookCard from "../components/BookCard";
 import styled from "styled-components";

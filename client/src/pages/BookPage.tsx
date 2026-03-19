@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { markBookAsRead, type ReviewResponse } from "../api";
+import { type ReviewResponse } from "../types/types";
+import { markBookAsRead } from "../services/book.service"; 
 import styled from "styled-components";
 import { StyledNavLink } from "../styles/StyledNavLink";
 import StarRate from "../components/StarRate";
