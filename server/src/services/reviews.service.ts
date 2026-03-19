@@ -2,17 +2,15 @@ import { User } from "../entities/users";
 import { Book } from "../entities/books";
 import { AppDataSource } from "../data-source";
 import { Review } from "../entities/reviews";
+import { CreateReviewDetails, UpdateReviewDetails } from "../types/reviews.types";
 
 const reviewRepo = AppDataSource.getRepository(Review);
 const bookRepo = AppDataSource.getRepository(Book);
 const userRepo = AppDataSource.getRepository(User);
 
-async function createReview(
-  content: string,
-  rating: number,
-  userId: number,
-  bookId: number,
-) {
+async function createReview(createReviewDetails: CreateReviewDetails) {
+  const { content, rating, userId, bookId } = createReviewDetails;
+
   const user = await userRepo.findOneBy({ id: userId });
   if (!user) throw new Error("User not found");
 
@@ -42,12 +40,9 @@ async function findReview(id: number) {
 }
 
 async function updateReview(
-  id: number,
-  content: string,
-  rating: number,
-  userId: number,
-  bookId: number,
+  updateReviewDetails: UpdateReviewDetails
 ) {
+  const { id, content, rating, userId, bookId } = updateReviewDetails
   const review = await reviewRepo.findOne({
     where: { id },
     relations: {

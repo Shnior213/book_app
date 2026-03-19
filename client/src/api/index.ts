@@ -135,18 +135,13 @@ export const getUserById = async (id: number): Promise<User> => {
   return res.data;
 };
 
-export const markBookAsRead = async (
-  bookId: number,
-) /* : Promise<AuthResponse> */ => {
+export const markBookAsRead = async (bookId: number) => {
   const res = await api.post(`/users/read-book/${bookId}`);
-
   return res.data;
 };
 
 export const getAllBooks = async (): Promise<BookResponse[]> => {
   const res = await api.get("/books");
-  // console.log(res.data);
-
   return res.data;
 };
 

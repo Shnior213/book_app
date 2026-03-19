@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { StyledNavLink } from "../styles/StyledNavLink";
-import { useUserContext } from "../context/useUserContext";
+import { useUserContext } from "../context/UseUserContext";
 import { logout } from "../api";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
@@ -65,6 +65,7 @@ const LogoutButton = styled.button`
 const NavBar = () => {
   const { user, setUser } = useUserContext();
   const nav = useNavigate();
+  // console.log(user);
 
   const { mutate: logoutMutation } = useMutation({
     mutationFn: logout,

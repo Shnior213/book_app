@@ -2,7 +2,7 @@ import { User } from "../entities/users";
 import { AppDataSource } from "../data-source";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { CreateUserDetails, UpdateUserdetails } from "../utils/types";
+import { UpdateUserDetails } from "../types/users.types";
 import usersController from "../controllers/users.controller";
 import { Book } from "../entities/books";
 
@@ -24,8 +24,8 @@ async function findOneById(id: number) {
   return user;
 }
 
-async function updateUser(id: number, updateUserParams: UpdateUserdetails) {
-  const { email, name, password } = updateUserParams;
+async function updateUser( updateUserParams: UpdateUserDetails) {
+  const { id, email, name, password } = updateUserParams;
   const user = await userRepo.findOneBy({ id });
   if (!user) throw new Error("User Not Found");
 

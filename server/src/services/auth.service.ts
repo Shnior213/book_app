@@ -1,6 +1,6 @@
 import { AppDataSource } from "../data-source";
 import jwt from "jsonwebtoken";
-import { CreateUserDetails } from "../utils/types";
+import { CreateUserDetails } from "../types/users.types";
 import bcrypt from "bcryptjs";
 import { User } from "../entities/users";
 
@@ -62,19 +62,21 @@ async function login(createUserParams: CreateUserDetails) {
 async function refreshAccessToken(refreshToken: string) {
   if (!refreshToken) throw new Error(" no refresh token provided");
 
-  const user = await userRepo.findOneBy({ refreshToken });
-  if (!user) throw new Error("invalid refresh token");
-
+  let decoded;
   try {
-    const decoded = jwt.verify(
-      refreshToken,
-      process.env.REFRESH_TOKEN_SECRET!,
-    ) as { id: number };
-    const newAccessToken = generateAccessToken(decoded.id, user.email);
-    return { accessToken: newAccessToken, userId: user.id};
-  } catch {
+    decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET!) as {
+      id: number;
+    };
+  } catch (err) {
     throw new Error("Expired or invalid refresh token");
   }
+
+  const user = await userRepo.findOneBy({ id: decoded.id, refreshToken });
+  if (!user) throw new Error("invalid refresh token or user not found");
+
+  const newAccessToken = generateAccessToken(decoded.id, user.email);
+  
+  return { accessToken: newAccessToken, userId: user.id, userName: user.name };
 }
 
 async function logoutUser(refreshToken: string) {

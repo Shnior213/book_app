@@ -1,11 +1,11 @@
-import { CreateUserDetails } from "../utils/types";
-import AutoSevice from "../services/auth.service";
+import { CreateUserDetails } from "../types/users.types";
+import AuthSevice from "../services/auth.service";
 import { Request, Response } from "express";
 
 async function register(req: Request, res: Response) {
   try {
     const userRegisterDetailes: CreateUserDetails = req.body;
-    const user = await AutoSevice.register(userRegisterDetailes);
+    const user = await AuthSevice.register(userRegisterDetailes);
     res.status(201).json(user);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Something went wrong";
@@ -16,7 +16,7 @@ async function register(req: Request, res: Response) {
 async function login(req: Request, res: Response) {
   try {
     const userRegisterDetailes = req.body;
-    const result = await AutoSevice.login(userRegisterDetailes);
+    const result = await AuthSevice.login(userRegisterDetailes);
     res.json(result);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Something went wrong";
@@ -27,7 +27,7 @@ async function login(req: Request, res: Response) {
 export const refresh = async (req: Request, res: Response) => {
   try {
     const { refreshToken } = req.body;
-    const result = await AutoSevice.refreshAccessToken(refreshToken);
+    const result = await AuthSevice.refreshAccessToken(refreshToken);
     res.json(result);
   } catch (err: any) {
     res.status(403).json({ message: err.message });
@@ -37,7 +37,7 @@ export const refresh = async (req: Request, res: Response) => {
 export const logout = async (req: Request, res: Response) => {
   try {
     const { refreshToken } = req.body;
-    const result = await AutoSevice.logoutUser(refreshToken);
+    const result = await AuthSevice.logoutUser(refreshToken);
     res.json(result);
   } catch (err: any) {
     res.status(400).json({ message: err.message });

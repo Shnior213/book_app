@@ -2,18 +2,14 @@ import { Book } from "../entities/books";
 import { AppDataSource } from "../data-source";
 import { Review } from "../entities/reviews";
 import { User } from "../entities/users";
+import { CreateBookDetails, UpdateBookDetails } from "../types/books.types";
 
 const bookRepo = AppDataSource.getRepository(Book);
 const userRepo = AppDataSource.getRepository(User);
 const reviewRepo = AppDataSource.getRepository(Review);
 
-async function createBook(
-  title: string,
-  author: string,
-  userId: number,
-  reviews: Review[],
-  image?: string,
-) {
+async function createBook(createBookDetailes: CreateBookDetails) {
+  const { title, author, userId, reviews, image } = createBookDetailes;
 
   const user = await userRepo.findOneBy({ id: userId });
   if (!user) throw new Error("User not found");
@@ -46,14 +42,9 @@ async function findBook(id: number) {
   return book;
 }
 
-async function updateBook(
-  id: number,
-  title: string,
-  author: string,
-  userId: number,
-  reviews: Review[],
-  image?: string,
-) {
+async function updateBook(updateBookDetails: UpdateBookDetails) {
+  const { id, title, author, userId, reviews, image } = updateBookDetails;
+
   const book = await bookRepo.findOne({
     where: { id },
     relations: { reviews: true, addedBy: true },
@@ -61,7 +52,7 @@ async function updateBook(
   if (!book) throw new Error("Book not found");
 
   if (book.title !== title) {
-    const duplicate = await bookRepo.findOneBy({ title });
+    const duplicate = await bookRepo.existsBy({ title });
     if (duplicate) throw new Error("Title already exists");
     book.title = title;
   }
@@ -81,7 +72,7 @@ async function updateBook(
 async function deleteBook(id: number) {
   const book = await bookRepo.findOneBy({ id });
   if (!book) throw new Error("Book not found");
-  
+
   const result = await bookRepo.delete(id);
   return result;
 }

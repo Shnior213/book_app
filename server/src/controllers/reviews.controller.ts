@@ -1,22 +1,24 @@
 import { Request, Response } from "express";
 import ReviewsService from "../services/reviews.service";
+import {
+  CreateReviewDetails,
+  UpdateReviewDetails,
+} from "../types/reviews.types";
 
 async function createReview(req: Request, res: Response) {
   try {
-    const { content, rating, bookId } = req.body;
     const userId = req.user!.id;
-    // const bookId = req.book!.id;
-
+    
+    const { bookId } = req.body;
     if (!bookId) {
       return res.status(400).json({ message: "bookId is required" });
     }
 
-    const review = await ReviewsService.createReview(
-      content,
-      Number(rating),
-      userId,
-      bookId,
-    );
+    const createReviewDetails: CreateReviewDetails = {...req.body,
+      userId
+    };
+
+    const review = await ReviewsService.createReview(createReviewDetails);
     res.status(201).json(review);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Something went wrong";
@@ -47,14 +49,11 @@ async function findReview(req: Request, res: Response) {
 async function updateReview(req: Request, res: Response) {
   try {
     const id = Number(req.params.id);
-    const { content, rating, userId, bookId } = req.body;
-    const review = ReviewsService.updateReview(
-      id,
-      content,
-      rating,
-      userId,
-      bookId,
-    );
+    if (isNaN(id)) {
+      return res.status(400).json({ message: "Invalid review ID" });
+    }
+    const updateReviewDetails: UpdateReviewDetails = { ...req.body, id };
+    const review = await ReviewsService.updateReview(updateReviewDetails);
     res.json(review);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Something went wrong";
@@ -64,7 +63,7 @@ async function updateReview(req: Request, res: Response) {
 
 async function deleteReview(req: Request, res: Response) {
   try {
-    const review = await ReviewsService.deleteReview(Number(req.params.id));
+    await ReviewsService.deleteReview(Number(req.params.id));
     res.json("review deleted");
   } catch (err) {
     const message = err instanceof Error ? err.message : "Something went wrong";

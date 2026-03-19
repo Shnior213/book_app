@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import UsersService from "../services/users.service";
-import { UpdateUserdetails } from "../utils/types";
+import { UpdateUserDetails } from "../types/users.types";
 
 async function findAll(req: Request, res: Response) {
   try {
@@ -25,8 +25,8 @@ async function findOneById(req: Request, res: Response) {
 async function updateUser(req: Request, res: Response) {
   try {
     const id = Number(req.params.id);
-    const updateUserParams: UpdateUserdetails = req.body;
-    const user = await UsersService.updateUser(id, updateUserParams);
+    const updateUserParams: UpdateUserDetails = {...req.body, id};
+    const user = await UsersService.updateUser(updateUserParams);
     res.json(user);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Something went wrong";
@@ -36,7 +36,7 @@ async function updateUser(req: Request, res: Response) {
 
 async function deleteUser(req: Request, res: Response) {
   try {
-    const user = await UsersService.detleteUser(Number(req.params.id));
+    await UsersService.detleteUser(Number(req.params.id));
     res.json("User deleted");
   } catch (err) {
     const message = err instanceof Error ? err.message : "Something went wrong";
