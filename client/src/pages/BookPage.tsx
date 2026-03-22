@@ -1,11 +1,11 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import { type ReviewResponse } from "../types/types";
-import { markBookAsRead } from "../services/book.service"; 
+import { useNavigate, useParams } from "react-router-dom";
+import type { BookResponse, ReviewResponse } from "../types/types";
+import { getBook, markBookAsRead } from "../services/book.service";
 import styled from "styled-components";
 import { StyledNavLink } from "../styles/StyledNavLink";
 import StarRate from "../components/StarRate";
 import { Button } from "../styles/Button";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const StyledDiv = styled.div`
   display: flex;
@@ -48,9 +48,19 @@ const StyledButton = styled(Button)`
 `;
 
 const BookPage = () => {
-  const location = useLocation();
-  const { book, avgRating } = location.state;
+  const { id } = useParams();
   const nav = useNavigate();
+  const queryClient = useQueryClient();
+
+  const { data: book } = useQuery({
+    queryFn: () => getBook(Number(id)),
+    queryKey: ["books", id],
+    initialData: () => {
+      return queryClient
+        .getQueryData<BookResponse[]>(["books"])
+        ?.find((b) => b.id === Number(id));
+    },
+  });
 
   const { mutate: markBookAsReadMutation } = useMutation({
     mutationFn: markBookAsRead,
@@ -69,6 +79,13 @@ const BookPage = () => {
     markBookAsReadMutation(book.id);
   };
 
+  const reviews = book.reviews || [];
+
+  const avgRating =
+    reviews.length > 0
+      ? (reviews.reduce((a, r) => a + r.rating, 0) / reviews.length).toFixed(1)
+      : "0";
+
   return (
     <StyledDiv>
       <img
@@ -78,7 +95,7 @@ const BookPage = () => {
       />
       <h2> {book.title}</h2>
       <StyledDiv2>
-        <StarRate ratingValue={avgRating} />
+        <StarRate ratingValue={Number(avgRating)} />
         <RatingText>{avgRating} / 5</RatingText>
       </StyledDiv2>
       {book.reviews &&

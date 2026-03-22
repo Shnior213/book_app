@@ -41,7 +41,7 @@ const BookCard = ({ book }: PropsBook) => {
   return (
     <div>
       <CardDivBook key={book.id}>
-        <StyledLink to={"/bookpage"} state={{ book, avgRating }}>
+        <StyledLink to={`/bookpage/${book.id}`} >
           {book.title}
         </StyledLink>
         <p>{book.author}</p>

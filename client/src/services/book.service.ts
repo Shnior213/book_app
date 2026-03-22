@@ -11,6 +11,11 @@ export const getAllBooks = async (): Promise<BookResponse[]> => {
   return res.data;
 };
 
+export const getBook = async (bookId: number): Promise<BookResponse> => {
+  const res = await api.get(`/books/${bookId}`);
+  return res.data;
+};
+
 export const addBook = async (book: FormData) => {
   const res = await api.post("/books", book);
   return res.data;

@@ -2,10 +2,10 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { Form } from "../styles/Form";
 import { Input } from "../styles/Input";
 import { Button } from "../styles/Button";
-import { addReview } from "../services/review.service"; 
+import { addReview } from "../services/review.service";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type FormFields = {
   rating: number;
@@ -21,6 +21,7 @@ const AddReview = () => {
     formState: { errors, isSubmitting },
   } = useForm<FormFields>();
 
+  const queryClient = useQueryClient();
   const location = useLocation();
   const bookId = location.state;
   const nav = useNavigate();
@@ -29,6 +30,8 @@ const AddReview = () => {
     mutationFn: addReview,
     onSuccess: (data) => {
       console.log("Review added ", data);
+      queryClient.invalidateQueries({ queryKey: ["books"] });
+      queryClient.invalidateQueries({ queryKey: ["userData"] });
       setValue("rating", 0);
       setValue("content", "");
       nav(-1);
@@ -58,7 +61,7 @@ const AddReview = () => {
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      <h3>Add Book</h3>
+      <h3>Add Review</h3>
 
       <Input
         {...register("rating", {

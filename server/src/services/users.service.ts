@@ -18,13 +18,13 @@ async function findAll() {
 async function findOneById(id: number) {
   const user = await userRepo.findOne({
     where: { id },
-    relations: { readBooks: true, reviews: true },
+    relations: { readBooks: { reviews: true } },
   });
   if (!user) throw new Error("User Not Found");
   return user;
 }
 
-async function updateUser( updateUserParams: UpdateUserDetails) {
+async function updateUser(updateUserParams: UpdateUserDetails) {
   const { id, email, name, password } = updateUserParams;
   const user = await userRepo.findOneBy({ id });
   if (!user) throw new Error("User Not Found");
@@ -60,12 +60,12 @@ async function addReadBook(userId: number, bookId: number) {
   if (!alreadyExists) {
     user.readBooks = [...(user.readBooks || []), book];
     await userRepo.save(user);
-    return {message: "book added", user}
-  } 
+    return { message: "book added", user };
+  }
   // else {
   //   throw new Error("This book is already in your read list");
   // }
-  return {message: "book already exists", user};
+  return { message: "book already exists", user };
 }
 
 export default {

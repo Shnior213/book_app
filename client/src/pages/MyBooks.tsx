@@ -32,6 +32,8 @@ const MyBooks = () => {
     return <div>Error fetching data</div>;
   }
 
+  // console.log(userData);
+  
   return (
     <StyledDiv>
       {userData?.readBooks &&
