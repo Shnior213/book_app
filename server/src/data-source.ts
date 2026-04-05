@@ -7,6 +7,13 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+// console.log({
+//   host: process.env.DB_HOST,
+//   port: process.env.DB_PORT,
+//   user: process.env.DB_USER,
+//   db: process.env.DB_NAME,
+// });
+
 export const AppDataSource = new DataSource({
   type: "mysql",
   host: process.env.DB_HOST,

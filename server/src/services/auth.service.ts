@@ -11,7 +11,7 @@ const userRepo = AppDataSource.getRepository(User);
 
 const generateAccessToken = (id: number, email: string) => {
   return jwt.sign({ id, email }, ACCESS_TOKEN_SECRET, {
-    expiresIn: "7d",
+    expiresIn: "15m",
   });
 };
 
@@ -32,13 +32,13 @@ async function register(createUserParams: CreateUserDetails) {
   const user = userRepo.create({ name, email, password: hashedPassword });
   await userRepo.save(user);
 
-  const accessToken = generateAccessToken(user.id, user.email);
-  const refreshToken = generateRefreshToken(user.id, user.email);
+  // const accessToken = generateAccessToken(user.id, user.email);
+  // const refreshToken = generateRefreshToken(user.id, user.email);
 
-  user.refreshToken = refreshToken;
+  // user.refreshToken = refreshToken;
   await userRepo.save(user);
 
-  return { user, accessToken, refreshToken };
+  return { user /* , accessToken, refreshToken */ };
 }
 
 async function login(createUserParams: CreateUserDetails) {
@@ -75,7 +75,7 @@ async function refreshAccessToken(refreshToken: string) {
   if (!user) throw new Error("invalid refresh token or user not found");
 
   const newAccessToken = generateAccessToken(decoded.id, user.email);
-  
+
   return { accessToken: newAccessToken, userId: user.id, userName: user.name };
 }
 
