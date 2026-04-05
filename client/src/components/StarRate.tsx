@@ -15,6 +15,7 @@ const StarsContainer = styled.div`
 `;
 
 const StarRate = ({ ratingValue }: Props) => {
+  
   return (
     <StarsContainer>
       {[...Array(5)].map((_, index) => {

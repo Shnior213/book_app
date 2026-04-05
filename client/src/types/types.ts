@@ -50,4 +50,5 @@ export interface ReviewResponse {
   id: number;
   content: string;
   rating: number;
+  user: User;
 }

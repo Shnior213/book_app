@@ -30,13 +30,14 @@ async function findBooks() {
     relations: { readByUsers: true, reviews: true, addedBy: true },
   });
   if (!books) throw new Error("books Not Found");
+
   return books;
 }
 
 async function findBook(id: number) {
   const book = await bookRepo.findOne({
     where: { id },
-    relations: { readByUsers: true, reviews: true, addedBy: true },
+    relations: { readByUsers: true, reviews: { user: true}, addedBy: true },
   });
   if (!book) throw new Error("books Not Found");
   return book;

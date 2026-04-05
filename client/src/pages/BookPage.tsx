@@ -100,7 +100,11 @@ const BookPage = () => {
       </StyledDiv2>
       {book.reviews &&
         book.reviews.map((review: ReviewResponse) => (
-          <div key={review.id}>{review.content}</div>
+          <div key={review.id}>
+            {review.content}
+            <span style={{ fontSize: "1.1rem", color: "grey" }}> Added By</span> -{" "}
+            {review.user.name}
+          </div>
         ))}
       <StyledNavLink to={"/addreview"} state={book.id}>
         Add Review
