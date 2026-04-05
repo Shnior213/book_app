@@ -32,13 +32,9 @@ async function register(createUserParams: CreateUserDetails) {
   const user = userRepo.create({ name, email, password: hashedPassword });
   await userRepo.save(user);
 
-  // const accessToken = generateAccessToken(user.id, user.email);
-  // const refreshToken = generateRefreshToken(user.id, user.email);
-
-  // user.refreshToken = refreshToken;
   await userRepo.save(user);
 
-  return { user /* , accessToken, refreshToken */ };
+  return { user };
 }
 
 async function login(createUserParams: CreateUserDetails) {

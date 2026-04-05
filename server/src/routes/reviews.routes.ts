@@ -8,23 +8,14 @@ import {
 
 const router = Router();
 
-router.post("/", authMiddleware, ReviewsController.createReview);
-router.get("/", authMiddleware, ReviewsController.findReviews);
-router.get(
-  "/:id",
-  authMiddleware,
-  sameUserOrAdminMiddleware,
-  ReviewsController.findReview,
-);
-router.put(
-  "/:id",
-  authMiddleware,
-  sameUserOrAdminMiddleware,
-  ReviewsController.updateReview,
-);
+router.use(authMiddleware);
+
+router.post("/", ReviewsController.createReview);
+router.get("/", ReviewsController.findReviews);
+router.get("/:id", sameUserOrAdminMiddleware, ReviewsController.findReview);
+router.put("/:id", sameUserOrAdminMiddleware, ReviewsController.updateReview);
 router.delete(
   "/:id",
-  authMiddleware,
   sameUserOrAdminMiddleware,
   ReviewsController.deleteReview,
 );

@@ -15,25 +15,16 @@ import {
 
 const router = Router();
 
-router.get("/", authMiddleware, UsersController.findAll);
+router.use(authMiddleware);
+
+router.get("/", UsersController.findAll);
 router.get(
   "/:id",
-  authMiddleware,
   // sameUserOrAdminMiddleware,
   UsersController.findOneById,
 );
-router.put(
-  "/:id",
-  authMiddleware,
-  sameUserOrAdminMiddleware,
-  UsersController.updateUser,
-);
-router.delete(
-  "/:id",
-  authMiddleware,
-  isAdminMiddleware,
-  UsersController.deleteUser,
-);
-router.post("/read-book/:bookId", authMiddleware, UsersController.addReadBook);
+router.put("/:id", sameUserOrAdminMiddleware, UsersController.updateUser);
+router.delete("/:id", isAdminMiddleware, UsersController.deleteUser);
+router.post("/read-book/:bookId", UsersController.addReadBook);
 
 export default router;
