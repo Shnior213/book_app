@@ -52,7 +52,7 @@ const BookPage = () => {
   const nav = useNavigate();
   const queryClient = useQueryClient();
 
-  const { data: book } = useQuery({
+  const { data: book, isPending, isError } = useQuery({
     queryFn: () => getBook(Number(id)),
     queryKey: ["books", id],
     initialData: () => {
@@ -73,7 +73,7 @@ const BookPage = () => {
     },
   });
 
-  if (!book) return <div>book not found</div>;
+  if (!book || isError) return <div>book not found</div>;
 
   const handleReadClick = () => {
     markBookAsReadMutation(book.id);
@@ -86,6 +86,7 @@ const BookPage = () => {
       ? (reviews.reduce((a, r) => a + r.rating, 0) / reviews.length).toFixed(1)
       : "0";
 
+  if (isPending) return <div>Loading...</div>;
   return (
     <StyledDiv>
       <img
@@ -102,8 +103,11 @@ const BookPage = () => {
         book.reviews.map((review: ReviewResponse) => (
           <div key={review.id}>
             {review.content}
-            <span style={{ fontSize: "1.1rem", color: "grey" }}> Added By</span> -{" "}
-            {review.user.name}
+            <span style={{ fontSize: "1.1rem", color: "grey" }}>
+              {" "}
+              Added By
+            </span>{" "}
+            - {review?.user?.name}
           </div>
         ))}
       <StyledNavLink to={"/addreview"} state={book.id}>

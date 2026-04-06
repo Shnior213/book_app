@@ -72,7 +72,12 @@ async function refreshAccessToken(refreshToken: string) {
 
   const newAccessToken = generateAccessToken(decoded.id, user.email);
 
-  return { accessToken: newAccessToken, userId: user.id, userName: user.name };
+  return {
+    accessToken: newAccessToken,
+    userId: user.id,
+    userName: user.name,
+    isAdmin: user.isAdmin,
+  };
 }
 
 async function logoutUser(refreshToken: string) {

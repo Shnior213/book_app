@@ -1,15 +1,15 @@
-import type { AuthResponse, LoginData, RegisterData } from "../types/types";
+import type { AuthResponse, AuthFormFields } from "../types/types";
 import { api } from "../api/axiosInstance";
 
 export const registerUser = async (
-  userData: RegisterData,
+  userData: AuthFormFields,
 ): Promise<AuthResponse> => {
   const res = await api.post("/auth/register", userData);
 
   return res.data;
 };
 
-export const login = async (credentials: LoginData): Promise<AuthResponse> => {
+export const login = async (credentials: AuthFormFields): Promise<AuthResponse> => {
   const res = await api.post("/auth/login", credentials);
   const userId = res.data.user.id;
   localStorage.setItem("accessToken", res.data.accessToken);
