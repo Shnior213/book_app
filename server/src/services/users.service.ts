@@ -18,7 +18,10 @@ async function findAll() {
 async function findOneById(id: number) {
   const user = await userRepo.findOne({
     where: { id },
-    relations: { readBooks: { reviews: true, readByUsers: true } },
+    relations: {
+      readBooks: { reviews: true, readByUsers: true },
+      addedBooks: { reviews: true },
+    },
   });
   if (!user) throw new Error("User Not Found");
   return user;

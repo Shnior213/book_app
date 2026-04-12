@@ -10,6 +10,7 @@ import { UserProvider } from "./context/UserProvider";
 import MyBooks from "./pages/MyBooks";
 import ProtectedRoute from "./components/ProtectedRoute";
 import UpdateBook from "./pages/UpdateBook";
+import UserProfile from "./pages/UserProfile";
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
           {
             path: "/updatebook",
             element: <UpdateBook />,
+          },
+          {
+            path: "/userprofile",
+            element: <UserProfile />,
           },
         ],
       },

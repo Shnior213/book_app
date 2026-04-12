@@ -11,6 +11,7 @@ export interface User {
   password: string;
   name: string;
   readBooks: BookResponse[];
+  addedBooks:BookResponse[];
 }
 
 export interface AuthResponse {
