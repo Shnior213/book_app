@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import booksService from "../services/books.service";
 // import dotenv from "dotenv";
 
 // dotenv.config();
@@ -49,21 +50,36 @@ export const isAdminMiddleware = (
   next();
 };
 
-export const sameUserOrAdminMiddleware = (
+export const sameUserOrAdminMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  const id = Number(req.params.id);
+  const bookId = Number(req.params.id);
 
-  if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
-
+  if (isNaN(bookId)) return res.status(400).json({ message: "Invalid ID" });
   if (!req.user) return res.status(401).json({ message: "Not authenticated" });
 
-  if (req.user.id !== id && !req.user.isAdmin) {
-    return res.status(403).json({ message: "Forbidden" });
+  try {
+    const book = await booksService.findBook(bookId);
+
+    if (!book) {
+      return res.status(404).json({ message: "Book not found" });
+    }
+
+    const isOwner = book.addedBy.id === req.user.id;
+    const isAdmin = req.user.isAdmin;
+
+    if (!isOwner && !isAdmin) {
+      return res
+        .status(403)
+        .json({ message: "Forbidden: You are not the owner" });
+    }
+
+    next();
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
   }
-  next();
 };
 
 // export const authenticate = (req: Request, res: Response, next: NextFunction) => {

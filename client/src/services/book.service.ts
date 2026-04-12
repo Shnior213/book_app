@@ -20,3 +20,13 @@ export const addBook = async (book: FormData) => {
   const res = await api.post("/books", book);
   return res.data;
 };
+
+export const deleteBook = async (bookId: number) => {
+  const res = await api.delete(`/books/${bookId}`);
+  return res.data;
+};
+
+export const updateBook = async (bookId: number, bookDetails: FormData) => {
+  const res = await api.put(`/books/${bookId}`, bookDetails);
+  return res.data;
+};

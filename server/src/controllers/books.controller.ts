@@ -61,14 +61,19 @@ async function updateBook(req: Request, res: Response) {
   try {
     const id = Number(req.params.id);
     if (isNaN(id)) {
-      return res.status(400).json({ message: "Invalid review ID" });
+      return res.status(400).json({ message: "Invalid book ID" });
     }
+    const userId = req.user!.id;
 
     const updateBookDetails: UpdateBookDetails = {
       ...req.body,
       id,
-      image: req.file?.path,
+      userId,
     };
+
+    if (req.file) {
+      updateBookDetails.image = req.file.path;
+    }
 
     const book = await BooksService.updateBook(updateBookDetails);
 
@@ -93,7 +98,7 @@ async function readedBook(req: Request, res: Response) {
   const bookId = Number(req.params.id);
   const userId = req.user!.id;
 
-  if(!bookId){
+  if (!bookId) {
     return res.status(400).json({ message: "bookId is required" });
   }
 
@@ -109,7 +114,7 @@ async function unReadedBook(req: Request, res: Response) {
   const bookId = Number(req.params.id);
   const userId = req.user!.id;
 
-  if(!bookId){
+  if (!bookId) {
     return res.status(400).json({ message: "bookId is required" });
   }
   try {

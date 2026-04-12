@@ -11,10 +11,14 @@ export const registerUser = async (
 
 export const login = async (credentials: AuthFormFields): Promise<AuthResponse> => {
   const res = await api.post("/auth/login", credentials);
+  console.log(res.data);
+  
   const userId = res.data.user.id;
+  const isAdmin = res.data.user.isAdmin;
   localStorage.setItem("accessToken", res.data.accessToken);
   localStorage.setItem("refreshToken", res.data.refreshToken);
   localStorage.setItem("userId", userId.toString());
+  localStorage.setItem("isAdmin", isAdmin.toString());
   return res.data;
 };
 

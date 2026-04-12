@@ -23,12 +23,12 @@ export class Book {
   @Column({ nullable: true })
   image?: string;
 
-  @ManyToOne(() => User, (user) => user.addedBooks)
+  @ManyToOne(() => User, (user) => user.addedBooks, { onDelete: "CASCADE" })
   addedBy!: User;
 
   @OneToMany(() => Review, (review) => review.book, { cascade: true })
   reviews?: Review[];
 
-  @ManyToMany(() => User, (user) => user.readBooks, {onDelete: "CASCADE"})
+  @ManyToMany(() => User, (user) => user.readBooks, { onDelete: "CASCADE" })
   readByUsers?: User[];
 }

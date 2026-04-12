@@ -1,6 +1,6 @@
 import { createContext, type Dispatch, type SetStateAction } from "react";
 
-export type UserCtx = { userId: string; username: string | null };
+export type UserCtx = { userId: string; isAdmin: boolean; username: string | null };
 
 export const UserContext = createContext<
   | {

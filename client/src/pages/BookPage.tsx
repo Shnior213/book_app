@@ -1,11 +1,17 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router";
 import type { BookResponse, ReviewResponse } from "../types/types";
-import { getBook, markBookAsRead } from "../services/book.service";
+import { deleteBook, getBook, markBookAsRead } from "../services/book.service";
 import styled from "styled-components";
 import { StyledNavLink } from "../styles/StyledNavLink";
 import StarRate from "../components/StarRate";
 import { Button } from "../styles/Button";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useUserContext } from "../context/UseUserContext";
+
+interface ButtonProps {
+  bg?: string;
+  bgh: string;
+}
 
 const StyledDiv = styled.div`
   display: flex;
@@ -27,6 +33,12 @@ const StyledDiv2 = styled.div`
   justify-content: center;
 `;
 
+const StyledButtonSection = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 const RatingText = styled.span`
   font-size: 1.1rem;
   font-weight: bold;
@@ -34,25 +46,30 @@ const RatingText = styled.span`
   font-family: sans-serif;
 `;
 
-const StyledButton = styled(Button)`
+const StyledButton = styled(Button)<ButtonProps>`
   width: 170px;
   height: 45px;
-  background-color: hsl(206.6, 90%, 92%);
+  background-color: ${(props) => props.bg};
   border-radius: 8px;
   font-size: 1rem;
   font-weight: bold;
 
   &:hover {
-    background-color: hsl(206.6, 90%, 90%);
+    background-color: ${(props) => props.bgh};
   }
 `;
 
 const BookPage = () => {
+  const { user } = useUserContext();
   const { id } = useParams();
   const nav = useNavigate();
   const queryClient = useQueryClient();
 
-  const { data: book, isPending, isError } = useQuery({
+  const {
+    data: book,
+    isPending,
+    isError,
+  } = useQuery({
     queryFn: () => getBook(Number(id)),
     queryKey: ["books", id],
     initialData: () => {
@@ -73,11 +90,28 @@ const BookPage = () => {
     },
   });
 
+  const { mutate: deleteBookMutation } = useMutation({
+    mutationFn: deleteBook,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["books"] });
+      console.log("Book deleted duccessfully");
+      nav("/");
+    },
+    onError: (err) => {
+      console.error("delete book failed", err);
+    },
+  });
+
+  if (isPending) return <div>Loading...</div>;
+
   if (!book || isError) return <div>book not found</div>;
 
   const handleReadClick = () => {
     markBookAsReadMutation(book.id);
   };
+
+  const isAdminOrSameUser =
+    book.addedBy?.id === Number(user?.userId) || user?.isAdmin;
 
   const reviews = book.reviews || [];
 
@@ -86,7 +120,6 @@ const BookPage = () => {
       ? (reviews.reduce((a, r) => a + r.rating, 0) / reviews.length).toFixed(1)
       : "0";
 
-  if (isPending) return <div>Loading...</div>;
   return (
     <StyledDiv>
       <img
@@ -113,7 +146,31 @@ const BookPage = () => {
       <StyledNavLink to={"/addreview"} state={book.id}>
         Add Review
       </StyledNavLink>
-      <StyledButton onClick={handleReadClick}>Add to Read List</StyledButton>
+      <StyledButton
+        bg="hsl(206.6, 90%, 92%)"
+        bgh="hsl(206.6, 90%, 90%)"
+        onClick={handleReadClick}
+      >
+        Add to Read List
+      </StyledButton>
+      {isAdminOrSameUser && (
+        <StyledButtonSection>
+          <StyledButton
+            bg="hsl(0, 90%, 65%)"
+            bgh="hsl(0, 90%, 70%)"
+            onClick={() => deleteBookMutation(book.id)}
+          >
+            Delete
+          </StyledButton>
+          <StyledButton
+            bg=" hsla(207, 100%, 77%, 0.90)"
+            bgh="hsla(207, 100%, 77%, 0.50)"
+            onClick={() => nav("/updatebook", { state: book })}
+          >
+            Edit
+          </StyledButton>
+        </StyledButtonSection>
+      )}
     </StyledDiv>
   );
 };

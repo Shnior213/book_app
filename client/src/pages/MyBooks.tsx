@@ -32,7 +32,7 @@ const MyBooks = () => {
     return <div>Error fetching data</div>;
   }
 
-  // console.log(userData);
+  console.log(userData);
   
   return (
     <StyledDiv>

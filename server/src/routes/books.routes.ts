@@ -17,13 +17,13 @@ router.post("/", upload.single("image"), BooksController.createBook);
 router.get("/:id", BooksController.findBook);
 router.put(
   "/:id",
-  // sameUserOrAdminMiddleware,
+  sameUserOrAdminMiddleware,
   upload.single("image"),
   BooksController.updateBook,
 );
 router.delete(
   "/:id",
-  // isAdminMiddleware,
+  isAdminMiddleware,
   BooksController.deleteBook,
 );
 router.post("/:id/read", BooksController.readedBook);
