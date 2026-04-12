@@ -1,7 +1,7 @@
-import { Link } from "react-router";
 import type { BookResponse } from "../types/types";
 import styled from "styled-components";
 import StarRate from "./StarRate";
+import { StyledLink } from "../styles/StyledLink";
 
 const CardDivBook = styled.div`
   width: 400px;
@@ -15,16 +15,7 @@ const CardDivBook = styled.div`
   font-size: 1.3rem;
 `;
 
-const StyledLink = styled(Link)`
-  font-size: 1.6rem;
-  font-weight: bold;
-  border-radius: 8px;
-  transition: all 0.2s ease;
 
-  &:hover {
-    text-shadow: 2px 2px rgba(0, 0, 0, 0.15);
-  }
-`;
 
 type PropsBook = {
   book: BookResponse;

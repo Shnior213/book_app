@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router";
+import { NavLink, useNavigate, useParams } from "react-router";
 import type { BookResponse, ReviewResponse } from "../types/types";
 import { deleteBook, getBook, markBookAsRead } from "../services/book.service";
 import styled from "styled-components";
@@ -10,7 +10,7 @@ import { useUserContext } from "../context/UseUserContext";
 
 interface ButtonProps {
   bg?: string;
-  bgh: string;
+  bgh?: string;
 }
 
 const StyledDiv = styled.div`
@@ -140,7 +140,10 @@ const BookPage = () => {
               {" "}
               Added By
             </span>{" "}
-            - {review?.user?.name}
+            -{" "}
+            <NavLink to="/userprofile" state={review?.user?.id}>
+              {review?.user?.name}
+            </NavLink>
           </div>
         ))}
       <StyledNavLink to={"/addreview"} state={book.id}>
