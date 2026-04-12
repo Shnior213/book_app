@@ -9,14 +9,14 @@ const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || "123";
 
 const userRepo = AppDataSource.getRepository(User);
 
-const generateAccessToken = (id: number, email: string) => {
-  return jwt.sign({ id, email }, ACCESS_TOKEN_SECRET, {
+const generateAccessToken = (id: number, email: string, isAdmin: boolean) => {
+  return jwt.sign({ id, email, isAdmin }, ACCESS_TOKEN_SECRET, {
     expiresIn: "15m",
   });
 };
 
-const generateRefreshToken = (id: number, email: string) => {
-  return jwt.sign({ id, email }, REFRESH_TOKEN_SECRET);
+const generateRefreshToken = (id: number, email: string, isAdmin: boolean) => {
+  return jwt.sign({ id, email, isAdmin }, REFRESH_TOKEN_SECRET);
 };
 
 async function register(createUserParams: CreateUserDetails) {
@@ -46,8 +46,8 @@ async function login(createUserParams: CreateUserDetails) {
   const isValid = await bcrypt.compare(password, user.password);
   if (!isValid) throw new Error("Invalid details");
 
-  const accessToken = generateAccessToken(user.id, user.email);
-  const refreshToken = generateRefreshToken(user.id, user.email);
+  const accessToken = generateAccessToken(user.id, user.email, user.isAdmin);
+  const refreshToken = generateRefreshToken(user.id, user.email, user.isAdmin);
 
   user.refreshToken = refreshToken;
   await userRepo.save(user);
@@ -70,7 +70,7 @@ async function refreshAccessToken(refreshToken: string) {
   const user = await userRepo.findOneBy({ id: decoded.id, refreshToken });
   if (!user) throw new Error("invalid refresh token or user not found");
 
-  const newAccessToken = generateAccessToken(decoded.id, user.email);
+  const newAccessToken = generateAccessToken(decoded.id, user.email, user.isAdmin);
 
   return {
     accessToken: newAccessToken,

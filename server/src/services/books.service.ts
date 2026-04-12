@@ -8,8 +8,8 @@ const bookRepo = AppDataSource.getRepository(Book);
 const userRepo = AppDataSource.getRepository(User);
 const reviewRepo = AppDataSource.getRepository(Review);
 
-async function createBook(createBookDetailes: CreateBookDetails) {
-  const { title, author, userId, reviews, image } = createBookDetailes;
+async function createBook(createBookDetails: CreateBookDetails) {
+  const { title, author, userId, reviews, image } = createBookDetails;
 
   const user = await userRepo.findOneBy({ id: userId });
   if (!user) throw new Error("User not found");
@@ -37,7 +37,7 @@ async function findBooks() {
 async function findBook(id: number) {
   const book = await bookRepo.findOne({
     where: { id },
-    relations: { readByUsers: true, reviews: { user: true}, addedBy: true },
+    relations: { readByUsers: true, reviews: { user: true }, addedBy: true },
   });
   if (!book) throw new Error("books Not Found");
   return book;
@@ -52,7 +52,7 @@ async function updateBook(updateBookDetails: UpdateBookDetails) {
   });
   if (!book) throw new Error("Book not found");
 
-  if (book.title !== title) {
+  if (title && book.title !== title) {
     const duplicate = await bookRepo.existsBy({ title });
     if (duplicate) throw new Error("Title already exists");
     book.title = title;
@@ -61,11 +61,21 @@ async function updateBook(updateBookDetails: UpdateBookDetails) {
   const user = await userRepo.findOneBy({ id: userId });
   if (!user) throw new Error("User not found");
 
-  bookRepo.merge(book, {
-    author,
-    addedBy: user,
-    image,
-  });
+  const updateData: any = {};
+
+  if (author) updateData.author = author;
+
+  if (userId) {
+    const user = await userRepo.findOneBy({ id: userId });
+    if (!user) throw new Error("User not found");
+    updateData.addedBy = user;
+  }
+
+  if (image) {
+    updateData.image = image;
+  }
+
+  bookRepo.merge(book, updateData);
 
   return await bookRepo.save(book);
 }

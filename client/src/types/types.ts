@@ -7,6 +7,7 @@ export type AuthFormFields = {
 export interface User {
   id: number;
   email: string;
+  isAdmin: boolean;
   password: string;
   name: string;
   readBooks: BookResponse[];
@@ -29,12 +30,13 @@ export interface Book {
 }
 
 export interface BookResponse {
+  addedBy: User;
   id: number;
   title: string;
   author: string;
   image: string;
   reviews: ReviewResponse[];
-  // readByUsers:
+  readByUsers: User;
 }
 
 export interface Review {

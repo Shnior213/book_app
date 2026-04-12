@@ -1,6 +1,6 @@
 import { type UseFormSetError } from "react-hook-form";
 import { registerUser } from "../services/auth.service";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { useMutation } from "@tanstack/react-query";
 import AuthForm from "../components/AuthForm";
 import type { AuthFormFields } from "../types/types";

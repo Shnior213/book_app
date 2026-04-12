@@ -1,11 +1,11 @@
 import { Review } from "../entities/reviews";
 
 export type CreateBookDetails = {
-  title: string,
-  author: string,
-  userId: number,
-  reviews: Review[],
-  image?: string,
-}
+  title: string;
+  author: string;
+  userId: number;
+  reviews: Review[];
+  image?: string;
+};
 
-export type UpdateBookDetails = {id: number} &  CreateBookDetails
+export type UpdateBookDetails = { id: number } & Partial<CreateBookDetails>;

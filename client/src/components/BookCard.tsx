@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import type { BookResponse } from "../types/types";
 import styled from "styled-components";
 import StarRate from "./StarRate";
@@ -38,12 +38,12 @@ const BookCard = ({ book }: PropsBook) => {
       ? (reviews.reduce((a, r) => a + r.rating, 0) / reviews.length).toFixed(1)
       : "0";
 
+  // console.log(book);
+
   return (
     <div>
       <CardDivBook key={book.id}>
-        <StyledLink to={`/bookpage/${book.id}`} >
-          {book.title}
-        </StyledLink>
+        <StyledLink to={`/bookpage/${book.id}`}>{book.title}</StyledLink>
         <p>{book.author}</p>
         <img
           src={book.image}

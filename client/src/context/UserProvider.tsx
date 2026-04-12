@@ -14,9 +14,10 @@ export const UserProvider = ({ children }: UserProviderProps) => {
       try {
         const token = localStorage.getItem("accessToken");
         const storedUserId = localStorage.getItem("userId");
+        const storedUserIsAdmin = localStorage.getItem("isAdmin");
 
-        if (token && storedUserId) {
-          setUser({ userId: storedUserId, username: null });
+        if (token && storedUserId && storedUserIsAdmin) {
+          setUser({ userId: storedUserId, isAdmin: Boolean(storedUserIsAdmin), username: null });
         }
       } catch (error) {
         console.error(error);

@@ -1,11 +1,11 @@
+import { useMutation } from "@tanstack/react-query";
 import { useForm, type SubmitHandler } from "react-hook-form";
+import { useLocation, useNavigate } from "react-router";
+import { updateBook } from "../services/book.service";
+import { useEffect, useState } from "react";
 import { Form } from "../styles/Form";
 import { Input } from "../styles/Input";
 import { Button } from "../styles/Button";
-import { addBook } from "../services/book.service";
-import { useNavigate } from "react-router";
-import { useMutation } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
 
 type FormFields = {
   title: string;
@@ -13,15 +13,26 @@ type FormFields = {
   image: FileList | null;
 };
 
-const AddBook = () => {
-  const [preview, setPreview] = useState<string | null>(null);
+const UpdateBook = () => {
+  const location = useLocation();
+  const book = location.state;
+  const [preview, setPreview] = useState<string | null>(book.image || null);
+
+  console.log(book);
+
   const {
     register,
     handleSubmit,
     setValue,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<FormFields>();
+  } = useForm<FormFields>({
+    defaultValues: {
+      title: book.title,
+      author: book.author,
+      image: null,
+    },
+  });
 
   const nav = useNavigate();
 
@@ -36,13 +47,13 @@ const AddBook = () => {
     }
   }, [imageFile]);
 
-  const { mutate: addBookMutation } = useMutation({
-    mutationFn: addBook,
+  const { mutate: updateBookMutation } = useMutation({
+    mutationFn: ({ id, data }: { id: number; data: FormData }) =>
+      updateBook(id, data),
     onSuccess: () => {
       setValue("title", "");
       setValue("author", "");
       setValue("image", null);
-      setPreview(null)
       nav("/");
     },
     onError: (err) => {
@@ -51,11 +62,11 @@ const AddBook = () => {
   });
 
   const onSubmit: SubmitHandler<FormFields> = (data) => {
-    const userId = localStorage.getItem("userId");
+    // const userId = localStorage.getItem("userId");
 
-    const file = data.image instanceof FileList ? data.image[0] : data.image;
+    const file = data.image?.[0];
 
-    if (!file || !userId) {
+    if (!file) {
       alert("Please select an image");
       return;
     }
@@ -64,9 +75,11 @@ const AddBook = () => {
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("author", data.author);
-    formData.append("image", file);
+    if (data.image && data.image.length > 0) {
+      formData.append("image", file);
+    }
 
-    addBookMutation(formData);
+    updateBookMutation({ id: book.id, data: formData });
   };
 
   return (
@@ -91,10 +104,7 @@ const AddBook = () => {
       />
       {errors.author && <div>{errors.author.message}</div>}
 
-      <Input
-        type="file"
-        {...register("image", { required: " Image is required" })}
-      />
+      <Input type="file" {...register("image")} />
       {errors.image && <div>{errors.image.message}</div>}
 
       {preview && (
@@ -112,4 +122,4 @@ const AddBook = () => {
   );
 };
 
-export default AddBook;
+export default UpdateBook;

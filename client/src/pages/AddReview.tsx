@@ -3,8 +3,8 @@ import { Form } from "../styles/Form";
 import { Input } from "../styles/Input";
 import { Button } from "../styles/Button";
 import { addReview } from "../services/review.service";
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router";
+import { useNavigate } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type FormFields = {

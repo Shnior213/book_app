@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { StyledNavLink } from "../styles/StyledNavLink";
 import { useUserContext } from "../context/UseUserContext";
-import { logout } from "../services/auth.service"; 
-import { useNavigate } from "react-router-dom";
+import { logout } from "../services/auth.service";
+import { useNavigate } from "react-router";
 import { useMutation } from "@tanstack/react-query";
 
 const Header = styled.header`
@@ -76,6 +76,7 @@ const NavBar = () => {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
       localStorage.removeItem("userId");
+      localStorage.removeItem("isAdmin");
     },
     onError: (err) => {
       console.error("logout failed", err);

@@ -1,7 +1,7 @@
 import { type UseFormSetError } from "react-hook-form";
 import { login } from "../services/auth.service";
 import { useUserContext } from "../context/UseUserContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { useMutation } from "@tanstack/react-query";
 import AuthForm from "../components/AuthForm";
 import type { AuthFormFields } from "../types/types";
@@ -14,8 +14,11 @@ const LoginPage = () => {
   const { mutate: loginMutation, isPending } = useMutation({
     mutationFn: login,
     onSuccess: (responseData) => {
+      console.log(responseData);
+
       setUser({
         userId: responseData.user.id.toString(),
+        isAdmin: responseData.user.isAdmin,
         username: responseData.user.name,
       });
       nav("/");
