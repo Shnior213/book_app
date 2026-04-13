@@ -93,25 +93,33 @@ const NavBar = () => {
         <H1>Home Page</H1>
       </StyledNavLink>
 
-      {user ? (
-        <Ul>
+      <Ul>
+        {user?.isAdmin && (
           <Li>
-            <StyledNavLink to={"/mybooks"}>Books I Read</StyledNavLink>
+            <StyledNavLink to={"/userapage"}>users</StyledNavLink>
           </Li>
-          <Li>
-            <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
-          </Li>
-        </Ul>
-      ) : (
-        <Ul>
-          <Li>
-            <StyledNavLink to={"/register"}>Register</StyledNavLink>
-          </Li>
-          <Li>
-            <StyledNavLink to={"/login"}>Login</StyledNavLink>
-          </Li>
-        </Ul>
-      )}
+        )}
+
+        {user ? (
+          <>
+            <Li>
+              <StyledNavLink to={"/mybooks"}>Books I Read</StyledNavLink>
+            </Li>
+            <Li>
+              <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+            </Li>
+          </>
+        ) : (
+          <>
+            <Li>
+              <StyledNavLink to={"/register"}>Register</StyledNavLink>
+            </Li>
+            <Li>
+              <StyledNavLink to={"/login"}>Login</StyledNavLink>
+            </Li>
+          </>
+        )}
+      </Ul>
     </Header>
   );
 };

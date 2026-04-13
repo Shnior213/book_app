@@ -11,6 +11,7 @@ import MyBooks from "./pages/MyBooks";
 import ProtectedRoute from "./components/ProtectedRoute";
 import UpdateBook from "./pages/UpdateBook";
 import UserProfile from "./pages/UserProfile";
+import AllUsers from "./pages/AllUsers";
 
 const router = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
           {
             path: "/userprofile",
             element: <UserProfile />,
+          },
+          {
+            path: "/userapage",
+            element: <AllUsers />,
           },
         ],
       },

@@ -4,7 +4,7 @@ import StarRate from "./StarRate";
 import { StyledLink } from "../styles/StyledLink";
 
 const CardDivBook = styled.div`
-  width: 400px;
+  width: 380px;
   margin: auto;
   text-align: center;
   border: 1px solid #ddd;
@@ -14,8 +14,6 @@ const CardDivBook = styled.div`
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   font-size: 1.3rem;
 `;
-
-
 
 type PropsBook = {
   book: BookResponse;
