@@ -1,48 +1,15 @@
-import { useForm, type SubmitHandler } from "react-hook-form";
-import { Form } from "../styles/Form";
-import { Input } from "../styles/Input";
-import { Button } from "../styles/Button";
 import { addBook } from "../services/book.service";
 import { useNavigate } from "react-router";
 import { useMutation } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-
-type FormFields = {
-  title: string;
-  author: string;
-  image: FileList | null;
-};
+import AuthBookForm from "../components/AuthBookForm";
+import type { FormOutput } from "../schemas/book.schema";
 
 const AddBook = () => {
-  const [preview, setPreview] = useState<string | null>(null);
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors, isSubmitting },
-  } = useForm<FormFields>();
-
   const nav = useNavigate();
 
-  const imageFile = watch("image");
-
-  useEffect(() => {
-    if (imageFile && imageFile.length > 0) {
-      const file = imageFile[0];
-      const objectUrl = URL.createObjectURL(file);
-      setPreview(objectUrl);
-      return () => URL.revokeObjectURL(objectUrl);
-    }
-  }, [imageFile]);
-
-  const { mutate: addBookMutation } = useMutation({
+  const { mutate: addBookMutation, isPending } = useMutation({
     mutationFn: addBook,
     onSuccess: () => {
-      setValue("title", "");
-      setValue("author", "");
-      setValue("image", null);
-      setPreview(null)
       nav("/");
     },
     onError: (err) => {
@@ -50,65 +17,27 @@ const AddBook = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<FormFields> = (data) => {
+  const handleFormSubmit = (data: FormOutput) => {
     const userId = localStorage.getItem("userId");
 
-    const file = data.image instanceof FileList ? data.image[0] : data.image;
+    if (!userId) return;
 
-    if (!file || !userId) {
-      alert("Please select an image");
-      return;
-    }
     console.log("on submit", data);
 
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("author", data.author);
-    formData.append("image", file);
+    if (data.image) formData.append("image", data.image);
 
     addBookMutation(formData);
   };
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
-      <h3>Add Book</h3>
-
-      <Input
-        {...register("title", {
-          required: "title is required",
-        })}
-        type="text"
-        placeholder="Title"
-      />
-      {errors.title && <div>{errors.title.message}</div>}
-
-      <Input
-        {...register("author", {
-          required: "author is required",
-        })}
-        type="text"
-        placeholder="Author"
-      />
-      {errors.author && <div>{errors.author.message}</div>}
-
-      <Input
-        type="file"
-        {...register("image", { required: " Image is required" })}
-      />
-      {errors.image && <div>{errors.image.message}</div>}
-
-      {preview && (
-        <img
-          src={preview}
-          alt="preview"
-          style={{ width: "100px", margin: "10px 0" }}
-        />
-      )}
-      <Button disabled={isSubmitting} type="submit">
-        {isSubmitting ? "Loading" : "Submit"}
-      </Button>
-      {errors.root && <div>{errors.root.message}</div>}
-    </Form>
+    <AuthBookForm
+      title="Add New Book"
+      onSubmit={handleFormSubmit}
+      isPending={isPending}
+    />
   );
 };
 

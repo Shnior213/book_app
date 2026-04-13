@@ -6,15 +6,22 @@ import {
   type SubmitHandler,
   type UseFormSetError,
 } from "react-hook-form";
-import type { AuthFormFields } from "../types/types";
+// import type { AuthFormFields } from "../types/types";
 import styled from "styled-components";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const formSchema = z.object({
+  name: z.string().optional(),
+  email: z.string().email(),
+  password: z.string().min(6),
+});
+
+type Formfileds = z.infer<typeof formSchema>;
 
 type PropesForm = {
   title: string;
-  onSubmit: (
-    data: AuthFormFields,
-    setError: UseFormSetError<AuthFormFields>,
-  ) => void;
+  onSubmit: (data: Formfileds, setError: UseFormSetError<Formfileds>) => void;
   isPending: boolean;
 };
 
@@ -30,9 +37,11 @@ const AuthForm = ({ title, onSubmit, isPending }: PropesForm) => {
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm<AuthFormFields>();
+  } = useForm<Formfileds>({
+    resolver: zodResolver(formSchema),
+  });
 
-  const handleFormSubmit: SubmitHandler<AuthFormFields> = (data) => {
+  const handleFormSubmit: SubmitHandler<Formfileds> = (data) => {
     onSubmit(data, setError);
   };
 
@@ -41,41 +50,13 @@ const AuthForm = ({ title, onSubmit, isPending }: PropesForm) => {
       <h3>{title}</h3>
 
       {title === "Register" && (
-        <Input
-          {...register("name", {
-            required: "name is required",
-          })}
-          type="text"
-          placeholder="Name"
-        />
+        <Input {...register("name")} type="text" placeholder="Name" />
       )}
-      {errors.name && <StyledErrorDiv>{errors.name.message}</StyledErrorDiv>}
-      <Input
-        {...register("email", {
-          required: "email is required",
-          validate: (value) => {
-            if (!value.includes("@")) {
-              return "Email must include @";
-            }
-            return true;
-          },
-        })}
-        type="text"
-        placeholder="Email"
-      />
-      {errors.email && <StyledErrorDiv>{errors.email.message}</StyledErrorDiv>}
-      <Input
-        {...register("password", {
-          required: "password is required",
-          minLength: {
-            value: 6,
-            message: "Password must have at least 6 characters",
-          },
-        })}
-        type="password"
-        placeholder="Password"
-      />
-      {errors.password && <StyledErrorDiv>{errors.password.message}</StyledErrorDiv>}
+
+      <Input {...register("email")} type="email" placeholder="Email" />
+
+      <Input {...register("password")} type="password" placeholder="Password" />
+
       <Button disabled={isPending} type="submit">
         {isPending ? "Loading..." : "Submit"}
       </Button>
