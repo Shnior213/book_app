@@ -14,8 +14,6 @@ const LoginPage = () => {
   const { mutate: loginMutation, isPending } = useMutation({
     mutationFn: login,
     onSuccess: (responseData) => {
-      console.log(responseData);
-
       setUser({
         userId: responseData.user.id.toString(),
         isAdmin: responseData.user.isAdmin,
