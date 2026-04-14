@@ -2,7 +2,7 @@ import { Book } from "../entities/books";
 import { AppDataSource } from "../data-source";
 import { Review } from "../entities/reviews";
 import { User } from "../entities/users";
-import { CreateBookDetails, UpdateBookDetails } from "../types/books.types";
+import { CreateBookDetails, UpdateBookDetails } from "../schemas/book.schame";
 
 const bookRepo = AppDataSource.getRepository(Book);
 const userRepo = AppDataSource.getRepository(User);

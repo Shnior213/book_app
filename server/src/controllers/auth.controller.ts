@@ -1,4 +1,4 @@
-import { CreateUserDetails } from "../types/users.types";
+import { CreateUserDetails } from "../schemas/user.schame";
 import AuthSevice from "../services/auth.service";
 import { Request, Response } from "express";
 

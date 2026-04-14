@@ -1,8 +1,8 @@
 import { AppDataSource } from "../data-source";
 import jwt from "jsonwebtoken";
-import { CreateUserDetails } from "../types/users.types";
 import bcrypt from "bcryptjs";
 import { User } from "../entities/users";
+import { CreateUserDetails } from "../schemas/user.schame";
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET || "123";
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || "123";

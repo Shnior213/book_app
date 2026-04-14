@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import UsersService from "../services/users.service";
-import { UpdateUserDetails } from "../types/users.types";
+import { UpdateUserDetails } from "../schemas/user.schame";
 
 async function findAll(req: Request, res: Response) {
   try {
@@ -25,7 +25,7 @@ async function findOneById(req: Request, res: Response) {
 async function updateUser(req: Request, res: Response) {
   try {
     const id = Number(req.params.id);
-    const updateUserParams: UpdateUserDetails = {...req.body, id};
+    const updateUserParams: UpdateUserDetails = { ...req.body, id };
     const user = await UsersService.updateUser(updateUserParams);
     res.json(user);
   } catch (err) {

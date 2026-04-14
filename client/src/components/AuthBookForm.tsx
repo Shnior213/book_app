@@ -9,11 +9,9 @@ import { useEffect, useState } from "react";
 import { Form } from "../styles/Form";
 import { Input } from "../styles/Input";
 import { Button } from "../styles/Button";
-import styled from "styled-components";
+import { StyledErrorDiv } from "../styles/StyledErrorDiv";
 
-const ErrorDiv = styled.div`
-  color: red;
-`;
+
 
 interface BookFormProps {
   initialData?: { title: string; author: string; image?: string };
@@ -62,24 +60,14 @@ const AuthBookForm = ({
       <h3>{title}</h3>
 
       <Input {...register("title")} type="text" placeholder="Title" />
-      {errors.title && (
-        <ErrorDiv style={{ color: "red", fontSize: "12px" }}>
-          {errors.title.message}
-        </ErrorDiv>
-      )}
+      {errors.title && <StyledErrorDiv>{errors.title.message}</StyledErrorDiv>}
 
       <Input {...register("author")} type="text" placeholder="Author" />
-      {errors.author && (
-        <ErrorDiv style={{ color: "red", fontSize: "12px" }}>
-          {errors.author.message}
-        </ErrorDiv>
-      )}
+      {errors.author && <StyledErrorDiv>{errors.author.message}</StyledErrorDiv>}
+
       <Input type="file" {...register("image")} />
-      {errors.image && (
-        <ErrorDiv style={{ color: "red", fontSize: "12px" }}>
-          {errors.image.message as string}
-        </ErrorDiv>
-      )}
+      {errors.image && <StyledErrorDiv>{errors.image.message as string}</StyledErrorDiv>}
+
       {preview && (
         <img
           src={preview}
@@ -90,7 +78,7 @@ const AuthBookForm = ({
       <Button disabled={isPending} type="submit">
         {isPending ? "Loading" : "Submit"}
       </Button>
-      {errors.root && <ErrorDiv>{errors.root.message}</ErrorDiv>}
+      {errors.root && <StyledErrorDiv>{errors.root.message}</StyledErrorDiv>}
     </Form>
   );
 };

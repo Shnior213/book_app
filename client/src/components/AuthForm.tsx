@@ -6,10 +6,9 @@ import {
   type SubmitHandler,
   type UseFormSetError,
 } from "react-hook-form";
-// import type { AuthFormFields } from "../types/types";
-import styled from "styled-components";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { StyledErrorDiv } from "../styles/StyledErrorDiv";
 
 const formSchema = z.object({
   name: z.string().optional(),
@@ -24,12 +23,6 @@ type PropesForm = {
   onSubmit: (data: Formfileds, setError: UseFormSetError<Formfileds>) => void;
   isPending: boolean;
 };
-
-const StyledErrorDiv = styled.div`
-  color: red;
-  box-shadow: 0 2px 5px hsla(0, 0%, 0%, 0.1);
-  font-size: 1rem;
-`;
 
 const AuthForm = ({ title, onSubmit, isPending }: PropesForm) => {
   const {
@@ -52,10 +45,15 @@ const AuthForm = ({ title, onSubmit, isPending }: PropesForm) => {
       {title === "Register" && (
         <Input {...register("name")} type="text" placeholder="Name" />
       )}
+      {errors.name && <StyledErrorDiv>{errors.name.message}</StyledErrorDiv>}
 
       <Input {...register("email")} type="email" placeholder="Email" />
+      {errors.email && <StyledErrorDiv>{errors.email.message}</StyledErrorDiv>}
 
       <Input {...register("password")} type="password" placeholder="Password" />
+      {errors.password && (
+        <StyledErrorDiv>{errors.password.message}</StyledErrorDiv>
+      )}
 
       <Button disabled={isPending} type="submit">
         {isPending ? "Loading..." : "Submit"}

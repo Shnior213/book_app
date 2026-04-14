@@ -1,10 +1,8 @@
 import { User } from "../entities/users";
 import { AppDataSource } from "../data-source";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import { UpdateUserDetails } from "../types/users.types";
-import usersController from "../controllers/users.controller";
 import { Book } from "../entities/books";
+import { UpdateUserDetails } from "../schemas/user.schame";
 
 const userRepo = AppDataSource.getRepository(User);
 const bookRepo = AppDataSource.getRepository(Book);
