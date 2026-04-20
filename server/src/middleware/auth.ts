@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import booksService from "../services/books.service";
 
-
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET || "123";
 
 type JwtPayload = {
@@ -18,15 +17,16 @@ export const authMiddleware = (
 ) => {
   const authHeader = req.headers.authorization;
 
+  
   if (!authHeader?.startsWith("Bearer "))
     return res.status(400).json({ msg: "No Token Provided" });
-
+  
   const token = authHeader.split(" ")[1];
   if (!token) return res.status(400).json({ msg: "No Token Provided" });
-
+  
   try {
     const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET) as JwtPayload;
-
+    
     req.user = decoded;
     next();
   } catch (err) {

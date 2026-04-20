@@ -12,6 +12,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import UpdateBook from "./pages/UpdateBook";
 import UserProfile from "./pages/UserProfile";
 import AllUsers from "./pages/AllUsers";
+import AddCategory from "./pages/AddCategiry";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
           {
             path: "/addreview",
             element: <AddReview />,
+          },
+          {
+            path: "/addcategory",
+            element: <AddCategory />,
           },
           {
             path: "/mybooks",

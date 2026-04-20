@@ -26,6 +26,7 @@ router.delete(
   isAdminMiddleware,
   BooksController.deleteBook,
 );
+router.post("/:id/category", BooksController.addBookToCategory);
 router.post("/:id/read", BooksController.readedBook);
 router.delete("/:id/read", BooksController.unReadedBook);
 

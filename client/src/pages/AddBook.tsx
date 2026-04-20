@@ -1,15 +1,18 @@
 import { addBook } from "../services/book.service";
 import { useNavigate } from "react-router";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import AuthBookForm from "../components/AuthBookForm";
 import type { FormOutput } from "../schemas/book.schema";
 
 const AddBook = () => {
   const nav = useNavigate();
+  const queryClient = useQueryClient();
 
   const { mutate: addBookMutation, isPending } = useMutation({
     mutationFn: addBook,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["books"] });
+
       nav("/");
     },
     onError: (err) => {
@@ -27,6 +30,12 @@ const AddBook = () => {
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("author", data.author);
+
+    if (data.categoryIds) {
+      data.categoryIds.forEach((id) => {
+        formData.append("categoryIds[]", id.toString());
+      });
+    }
     if (data.image) formData.append("image", data.image);
 
     addBookMutation(formData);

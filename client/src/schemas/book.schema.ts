@@ -11,6 +11,7 @@ export const bookSchema = z.object({
     })
     .nullable()
     .optional(),
+  categoryIds: z.array(z.coerce.number()).default([]),
 });
 
 export type FormInput = z.input<typeof bookSchema>;

@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import BooksService from "../services/books.service";
-import { CreateBookDetails, UpdateBookDetails } from "../schemas/book.schame";
-
+import { CreateBookDetails, UpdateBookDetails } from "../schemas/book.schema";
 
 async function createBook(req: Request, res: Response) {
   try {
@@ -123,6 +122,19 @@ async function unReadedBook(req: Request, res: Response) {
   }
 }
 
+async function addBookToCategory(req: Request, res: Response) {
+  try {
+    const bookId = Number(req.params.id);
+    const categoryId = Number(req.body.id);
+
+    const updateBook = await BooksService.addBookToCategory(categoryId, bookId);
+    res.json(updateBook);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Something went wrong";
+    res.status(400).json({ message });
+  }
+}
+
 export default {
   createBook,
   findBooks,
@@ -131,4 +143,5 @@ export default {
   deleteBook,
   readedBook,
   unReadedBook,
+  addBookToCategory,
 };

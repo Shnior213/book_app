@@ -6,17 +6,9 @@ import {
   type SubmitHandler,
   type UseFormSetError,
 } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { StyledErrorDiv } from "../styles/StyledErrorDiv";
-
-const formSchema = z.object({
-  name: z.string().optional(),
-  email: z.string().email(),
-  password: z.string().min(6),
-});
-
-type Formfileds = z.infer<typeof formSchema>;
+import { formSchema, type Formfileds } from "../schemas/user.schema";
 
 type PropesForm = {
   title: string;

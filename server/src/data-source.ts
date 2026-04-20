@@ -4,6 +4,7 @@ import { User } from "./entities/users";
 import { Book } from "./entities/books";
 import { Review } from "./entities/reviews";
 import dotenv from "dotenv";
+import { Category } from "./entities/category";
 
 dotenv.config();
 
@@ -23,5 +24,5 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_NAME,
   synchronize: true,
   logging: false,
-  entities: [User, Book, Review],
+  entities: [User, Book, Review, Category],
 });

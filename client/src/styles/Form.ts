@@ -7,9 +7,9 @@ export const Form = styled.form`
   flex-direction: column;
   background-color: hsl(0, 1%, 90%);
   width: 400px;
-  height: 550px;
+  height: 600px;
   font-size: 1.3rem;
-  margin: 20px auto;
+  margin: 40px auto;
   border-radius: 8px;
   box-shadow: 0 2px 5px hsla(0, 0%, 0%, 0.1);
 `;

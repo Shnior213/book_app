@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { type SubmitHandler } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router";
 import { updateBook } from "../services/book.service";
@@ -8,6 +8,7 @@ import type { FormOutput } from "../schemas/book.schema";
 const UpdateBook = () => {
   const location = useLocation();
   const book = location.state;
+  const queryClient = useQueryClient();
 
   const nav = useNavigate();
 
@@ -15,6 +16,8 @@ const UpdateBook = () => {
     mutationFn: ({ id, data }: { id: number; data: FormData }) =>
       updateBook(id, data),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["books"] });
+
       nav("/");
     },
     onError: (err) => {
@@ -28,6 +31,13 @@ const UpdateBook = () => {
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("author", data.author);
+
+    if (data.categoryIds) {
+      data.categoryIds.forEach((id) => {
+        formData.append("categoryIds[]", id.toString());
+      });
+    }
+
     if (data.image) formData.append("image", data.image);
 
     updateBookMutation({ id: book.id, data: formData });

@@ -30,3 +30,9 @@ export const updateBook = async (bookId: number, bookDetails: FormData) => {
   const res = await api.put(`/books/${bookId}`, bookDetails);
   return res.data;
 };
+export const addBookToCategory = async (bookId: number, cateogryId: number) => {
+  const res = await api.post(`/books/${bookId}`, cateogryId);
+  return res.data;
+};
+
+

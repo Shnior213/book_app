@@ -2,7 +2,7 @@ import { User } from "../entities/users";
 import { AppDataSource } from "../data-source";
 import bcrypt from "bcryptjs";
 import { Book } from "../entities/books";
-import { UpdateUserDetails } from "../schemas/user.schame";
+import { UpdateUserDetails } from "../schemas/user.schema";
 
 const userRepo = AppDataSource.getRepository(User);
 const bookRepo = AppDataSource.getRepository(Book);
@@ -63,9 +63,7 @@ async function addReadBook(userId: number, bookId: number) {
     await userRepo.save(user);
     return { message: "book added", user };
   }
-  // else {
-  //   throw new Error("This book is already in your read list");
-  // }
+  
   return { message: "book already exists", user };
 }
 

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import UsersService from "../services/users.service";
-import { UpdateUserDetails } from "../schemas/user.schame";
+import { UpdateUserDetails } from "../schemas/user.schema";
 
 async function findAll(req: Request, res: Response) {
   try {

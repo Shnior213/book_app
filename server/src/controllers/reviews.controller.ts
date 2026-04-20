@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import ReviewsService from "../services/reviews.service";
-import { CreateReviewDetails, UpdateReviewDetails } from "../schemas/review.schame";
+import { CreateReviewDetails, UpdateReviewDetails } from "../schemas/review.schema";
 
 
 async function createReview(req: Request, res: Response) {

@@ -11,7 +11,7 @@ export interface User {
   password: string;
   name: string;
   readBooks: BookResponse[];
-  addedBooks:BookResponse[];
+  addedBooks: BookResponse[];
 }
 
 export interface AuthResponse {
@@ -38,6 +38,7 @@ export interface BookResponse {
   image: string;
   reviews: ReviewResponse[];
   readByUsers: User;
+  categories: CategoryResponse[];
 }
 
 export interface Review {
@@ -50,4 +51,14 @@ export interface ReviewResponse {
   content: string;
   rating: number;
   user: User;
+}
+
+export interface Category {
+  name: string;
+}
+
+export interface CategoryResponse {
+  id: number;
+  name: string;
+  books: Book[];
 }

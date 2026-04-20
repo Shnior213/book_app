@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinTable,
   ManyToMany,
   ManyToOne,
   OneToMany,
@@ -8,6 +9,7 @@ import {
 } from "typeorm";
 import { User } from "./users";
 import { Review } from "./reviews";
+import { Category } from "./category";
 
 @Entity()
 export class Book {
@@ -29,6 +31,10 @@ export class Book {
   @OneToMany(() => Review, (review) => review.book, { cascade: true })
   reviews?: Review[];
 
-  @ManyToMany(() => User, (user) => user.readBooks, { onDelete: "CASCADE" })
+  @ManyToMany(() => User, (user) => user.readBooks)
   readByUsers?: User[];
+
+  @ManyToMany(() => Category, (category) => category.books, { cascade: true })
+  @JoinTable()
+  categories?: Category[];
 }

@@ -6,11 +6,8 @@ import { addReview } from "../services/review.service";
 import { useLocation } from "react-router";
 import { useNavigate } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-type FormFields = {
-  rating: number;
-  content: string;
-};
+import { reviewSchema, type ReviewFormfileds } from "../schemas/review.schmea";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const AddReview = () => {
   const {
@@ -19,7 +16,9 @@ const AddReview = () => {
     setValue,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm<FormFields>();
+  } = useForm<ReviewFormfileds>({
+    resolver: zodResolver(reviewSchema),
+  });
 
   const queryClient = useQueryClient();
   const location = useLocation();
@@ -42,7 +41,7 @@ const AddReview = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<FormFields> = (data) => {
+  const onSubmit: SubmitHandler<ReviewFormfileds> = (data) => {
     const userId = localStorage.getItem("userId");
 
     if (!userId || !bookId) {
@@ -63,15 +62,7 @@ const AddReview = () => {
     <Form onSubmit={handleSubmit(onSubmit)}>
       <h3>Add Review</h3>
 
-      <Input
-        {...register("rating", {
-          required: "rating is required",
-        })}
-        type="number"
-        min={0}
-        max={5}
-        placeholder="Rating"
-      />
+      <Input {...register("rating")} type="number" placeholder="Rating" />
       {errors.rating && <div>{errors.rating.message}</div>}
 
       <Input {...register("content")} type="text" placeholder="Content" />
